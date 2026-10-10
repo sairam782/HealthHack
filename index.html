@@ -432,6 +432,13 @@ textarea.control { resize: vertical; line-height: 1.55; }
 .req-top strong { font-size: 13.5px; }
 .req-text { grid-column: 1 / -1; font-size: 15px; line-height: 1.45; }
 .req-status { grid-column: 1 / -1; font-size: 13.5px; color: var(--ink-2); line-height: 1.45; }
+.req-linked { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 12px;
+  border-left: 2px solid var(--rule); padding: 2px 0 2px 13px; margin: 2px 0 2px 1px; }
+.req-linked > .eyebrow { font-size: 10px; letter-spacing: .11em; }
+.req-linked-item { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+.req-linked-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.req-linked-top strong { font-size: 13.5px; }
+.req-linked-item p { font-size: 14px; color: var(--ink-2); line-height: 1.45; }
 .req-foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
   font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
 

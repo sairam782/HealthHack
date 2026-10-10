@@ -193,17 +193,30 @@ function Login({ config, error, onLogin, onReload }) {
 }
 
 // ---------------------------------------------------------------- Patient request card
-function PatientTicket({ticket, copy, voiceConfigured, onReadback}) {
+function PatientTicket({ticket, linkedTickets=[], copy, voiceConfigured, onReadback}) {
   const tier = TIERS[ticket.tier];
-  const done = ticket.status==='RESOLVED';
+  const stateLabel = item => item.status==='RESOLVED'?copy.resolved:item.status==='ACKNOWLEDGED'?copy.acknowledged:copy.received;
+  const stateClass = item => 'pill '+(item.status==='RESOLVED'?'pill-ok':item.status==='ACKNOWLEDGED'?'pill-accent':'');
+  const linked = [...linkedTickets].sort((a,b)=>(a.status==='RESOLVED')-(b.status==='RESOLVED')||a.priority-b.priority);
   return h('article',{className:'req',style:{borderLeftColor:tier.color}},
     h('div',{className:'req-top'},
       h('strong',{style:{color:tier.color}},ticket.department),
-      h('span',{className:'pill '+(done?'pill-ok':ticket.status==='ACKNOWLEDGED'?'pill-accent':'')},
-        done?copy.resolved:ticket.status==='ACKNOWLEDGED'?copy.acknowledged:copy.received)
+      h('span',{className:stateClass(ticket)},stateLabel(ticket))
     ),
     h('p',{className:'req-text',dir:'auto'},ticket.original_text),
     h('p',{className:'req-status',dir:'auto'},ticket.status_message || ticket.patient_summary),
+    linked.length>0 && h('div',{className:'req-linked','aria-label':'Linked team requests'},
+      h('span',{className:'eyebrow'},'Teams on this request'),
+      linked.map(task=>h('div',{key:task.id,className:'req-linked-item'},
+        h('div',{className:'req-linked-top'},
+          h('strong',null,task.department),
+          h('span',{className:stateClass(task)},stateLabel(task))
+        ),
+        h('p',{dir:'auto'},task.status_message||task.patient_summary),
+        voiceConfigured&&h('button',{className:'btn btn-quiet btn-sm',onClick:()=>onReadback(task)},
+          h(Icon,{path:GLYPH.speaker,size:14}),'Read aloud')
+      ))
+    ),
     h('div',{className:'req-foot'},
       h('span',null,formatTime(ticket.created_at)+(ticket.parent_id?' · Service task':'')),
       voiceConfigured && h('button',{className:'btn btn-quiet btn-sm',onClick:()=>onReadback(ticket)},
@@ -805,7 +818,10 @@ function App() {
         h('section',{className:'history','aria-label':copy.history},
           h('h2',null,copy.history),
           tickets.length
-            ? tickets.slice(0,12).map(ticket=>h(PatientTicket,{key:ticket.id,ticket,copy,voiceConfigured:config?.voiceConfigured,onReadback:readback}))
+            ? tickets.filter(ticket=>!ticket.parent_id||!tickets.some(parent=>parent.id===ticket.parent_id)).slice(0,12)
+                .map(ticket=>h(PatientTicket,{key:ticket.id,ticket,
+                  linkedTickets:tickets.filter(task=>task.parent_id===ticket.id),
+                  copy,voiceConfigured:config?.voiceConfigured,onReadback:readback}))
             : h('p',{className:'hint'},'Your requests will appear here after they are delivered.')
         ),
         h('div',{className:'note'},'For immediate help, use the bedside call bell. This demo does not activate hospital paging equipment.'),
