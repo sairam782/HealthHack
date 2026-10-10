@@ -2,6 +2,8 @@
 
 Prepare a patient browser and a separate coordinator browser. Keep nursing and dietary sign-ins ready. Use synthetic text. Open both views before judging so authentication does not consume presentation time.
 
+For separate accounts in ordinary tabs, run `npm run test:users`. Use `patient.localhost:8124` for Room 412-B, `nurse.localhost:8125` for RN, `dietary.localhost:8126` for food services, `patient2.localhost:8127` for Room 413-A, `coordinator.localhost:8128` for unit coordination, and `bedside.localhost:8129` for PCT. Open each with `http://` and sign in with its role/room. These views share the existing database. Keep the hostnames intact so the browser does not replace one account's login with another.
+
 ## A 90-second story
 
 **0–15 seconds:** “A patient needs water; a nurse receives the interruption. Kaalinga sends routine requests to support teams while keeping clinical concerns with nursing, and shows the patient what happened.” Frame this as the challenge's problem, not a measured prototype outcome.

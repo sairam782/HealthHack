@@ -50,6 +50,28 @@ test('water reaches dietary and excludes nursing and other patients',async()=>{
     if(role==='nurse') assert.ok(!data.notifications.some(n=>n.ticket_id===id));
   }
 });
+test('all eight patient accounts have distinct rooms and private requests and alerts',async()=>{
+  const patients=(await request('/api/config')).data.accounts.filter(account=>account.role==='patient');
+  assert.equal(patients.length,8);
+  assert.equal(new Set(patients.map(patient=>patient.room)).size,8);
+  const created=[];
+  for(const patient of patients) {
+    const signedIn=await login(patient.id,patient.email);
+    assert.equal(signedIn.room,patient.room);
+    const result=await create('Can I have water?',patient.id,randomUUID(),{room:'RM 999',patient_id:'patient-412'});
+    assert.equal(result.response.status,201);
+    assert.equal(result.data.ticket.room,patient.room);
+    assert.equal(result.data.ticket.patient_id,patient.id);
+    created.push(result.data.ticket);
+  }
+  for(const patient of patients) {
+    const {data}=await request('/api/tickets',patient.id);
+    for(const ticket of created) {
+      assert.equal(data.tickets.some(item=>item.id===ticket.id),ticket.patient_id===patient.id);
+      assert.equal(data.notifications.some(item=>item.ticket_id===ticket.id),ticket.patient_id===patient.id);
+    }
+  }
+});
 test('mixed urgent request creates separate task with no clinical text for dietary',async()=>{
   const {data}=await create('I need water, I am choking'); const id=data.ticket.id;
   assert.equal(data.ticket.priority,1); assert.equal(data.ticket.department,'Nursing');
