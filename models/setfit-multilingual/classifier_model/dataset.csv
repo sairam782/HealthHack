@@ -1,0 +1,722 @@
+text,Registered Nurse,Patient Care Technician,Charge Nurse,Provider,Environmental Services,Dietary,group
+I need a blanket,0,1,0,0,0,0,0
+Can I have another blanket?,0,1,0,0,0,0,1
+Necesito una manta,0,1,0,0,0,0,0
+मुझे एक कंबल चाहिए,0,1,0,0,0,0,0
+J'ai besoin d'une couverture,0,1,0,0,0,0,0
+Could you bring me an extra blanket?,0,1,0,0,0,0,2
+I'd like a warmer blanket please,0,1,0,0,0,0,0
+Can I get a thicker cover for my bed?,0,1,0,0,0,0,3
+Please bring me one more blanket,0,1,0,0,0,0,4
+¿Me puede traer otra cobija?,0,1,0,0,0,0,5
+"Quisiera una manta extra, por favor",0,1,0,0,0,0,0
+क्या मुझे एक और कंबल मिल सकता है?,0,1,0,0,0,0,1
+कृपया मेरे लिए कंबल ले आइए,0,1,0,0,0,0,4
+Pourriez-vous m'apporter une autre couverture ?,0,1,0,0,0,0,2
+Je voudrais une couverture supplémentaire,0,1,0,0,0,0,6
+I'm feeling nauseous,1,0,0,0,0,0,7
+I feel like throwing up,1,0,0,0,0,0,8
+Tengo náuseas,1,0,0,0,0,0,7
+मुझे उल्टी जैसा लग रहा है,1,0,0,0,0,0,8
+J'ai envie de vomir,1,0,0,0,0,0,8
+I think I'm going to be sick,1,0,0,0,0,0,9
+My stomach feels queasy,1,0,0,0,0,0,10
+I just vomited,1,0,0,0,0,0,8
+"I need a bag, I might throw up",1,0,0,0,0,0,11
+Tengo ganas de vomitar,1,0,0,0,0,0,8
+Acabo de vomitar,1,0,0,0,0,0,8
+मुझे मतली हो रही है,1,0,0,0,0,0,12
+मैंने अभी उल्टी की है,1,0,0,0,0,0,8
+J'ai la nausée,1,0,0,0,0,0,13
+Je viens de vomir,1,0,0,0,0,0,8
+Can I get lunch?,0,0,0,0,0,1,14
+I would like some food,0,0,0,0,0,1,15
+Quiero algo de comer,0,0,0,0,0,1,15
+मुझे खाना चाहिए,0,0,0,0,0,1,15
+J'ai faim,0,0,0,0,0,1,16
+When is breakfast being served?,0,0,0,0,0,1,17
+"I'm hungry, can I order a meal?",0,0,0,0,0,1,16
+Can I see the menu?,0,0,0,0,0,1,18
+I'd like a snack please,0,0,0,0,0,1,15
+Tengo hambre,0,0,0,0,0,1,16
+¿Puedo pedir el almuerzo?,0,0,0,0,0,1,14
+मुझे भूख लगी है,0,0,0,0,0,1,16
+क्या मुझे नाश्ता मिल सकता है?,0,0,0,0,0,1,19
+Est-ce que je peux avoir le déjeuner ?,0,0,0,0,0,1,14
+Je voudrais quelque chose à manger,0,0,0,0,0,1,15
+I need to use the bathroom,0,1,0,0,0,0,20
+Can someone help me to the toilet?,0,1,0,0,0,0,20
+Necesito ir al baño,0,1,0,0,0,0,20
+मुझे बाथरूम जाना है,0,1,0,0,0,0,20
+Je dois aller aux toilettes,0,1,0,0,0,0,20
+I need help getting to the restroom,0,1,0,0,0,0,20
+Can I get a bedpan?,0,1,0,0,0,0,21
+I have to pee,0,1,0,0,0,0,20
+Please help me walk to the bathroom,0,1,0,0,0,0,20
+¿Me puede ayudar a ir al baño?,0,1,0,0,0,0,20
+Necesito un orinal,0,1,0,0,0,0,0
+मुझे शौचालय जाने में मदद चाहिए,0,1,0,0,0,0,20
+मुझे पेशाब करना है,0,1,0,0,0,0,20
+Pouvez-vous m'aider à aller aux toilettes ?,0,1,0,0,0,0,20
+J'ai besoin d'un bassin,0,1,0,0,0,0,22
+My TV isn't working,0,1,0,0,0,0,23
+Can someone fix the television?,0,1,0,0,0,0,24
+Mi televisor no funciona,0,1,0,0,0,0,23
+मेरा टीवी काम नहीं कर रहा है,0,1,0,0,0,0,23
+Ma télévision ne fonctionne pas,0,1,0,0,0,0,23
+The TV screen is black,0,1,0,0,0,0,25
+There's no sound coming from the TV,0,1,0,0,0,0,23
+How do I change the channel?,0,1,0,0,0,0,26
+Can someone turn on the television for me?,0,1,0,0,0,0,24
+La televisión no tiene sonido,0,1,0,0,0,0,23
+¿Alguien puede encender la tele?,0,1,0,0,0,0,24
+टीवी की आवाज़ नहीं आ रही है,0,1,0,0,0,0,23
+कृपया मेरा टीवी चालू कर दीजिए,0,1,0,0,0,0,24
+La télé n'a pas de son,0,1,0,0,0,0,23
+Pouvez-vous allumer la télévision ?,0,1,0,0,0,0,24
+I'm experiencing pain,1,0,0,0,0,0,9
+My stomach hurts badly,1,0,0,0,0,0,10
+Tengo mucho dolor,1,0,0,0,0,0,9
+मुझे बहुत दर्द हो रहा है,1,0,0,0,0,0,9
+J'ai très mal,1,0,0,0,0,0,9
+My head is pounding,1,0,0,0,0,0,27
+My back is really sore,1,0,0,0,0,0,28
+Can I get some pain medication?,1,0,0,0,0,0,29
+The pain in my leg is getting worse,1,0,0,0,0,0,30
+Me duele mucho la cabeza,1,0,0,0,0,0,27
+Necesito algo para el dolor,1,0,0,0,0,0,29
+मेरे सिर में बहुत दर्द है,1,0,0,0,0,0,27
+मुझे दर्द की दवा चाहिए,1,0,0,0,0,0,29
+J'ai mal au dos,1,0,0,0,0,0,28
+J'ai besoin d'un antidouleur,1,0,0,0,0,0,31
+Can I have some water?,0,1,0,0,0,0,22
+Please bring me water,0,1,0,0,0,0,22
+Necesito agua,0,1,0,0,0,0,22
+मुझे पानी चाहिए,0,1,0,0,0,0,22
+J'ai besoin d'eau,0,1,0,0,0,0,22
+I'm really thirsty,0,1,0,0,0,0,32
+Could you refill my water cup?,0,1,0,0,0,0,33
+May I have a glass of water?,0,1,0,0,0,0,34
+My water jug is empty,0,1,0,0,0,0,35
+Tengo mucha sed,0,1,0,0,0,0,32
+¿Me trae un vaso de agua?,0,1,0,0,0,0,34
+मुझे बहुत प्यास लगी है,0,1,0,0,0,0,32
+क्या मुझे एक गिलास पानी मिल सकता है?,0,1,0,0,0,0,34
+J'ai très soif,0,1,0,0,0,0,32
+Pourriez-vous me donner un verre d'eau ?,0,1,0,0,0,0,34
+Can I get some ice chips?,0,1,0,0,0,0,36
+Please bring me crushed ice,0,1,0,0,0,0,37
+Necesito hielo picado,0,1,0,0,0,0,38
+मुझे बर्फ के छोटे टुकड़े चाहिए,0,1,0,0,0,0,38
+Je voudrais de la glace pilée,0,1,0,0,0,0,38
+I'd like a cup of ice chips,0,1,0,0,0,0,36
+"My mouth is dry, can I have ice chips?",0,1,0,0,0,0,39
+Could you bring more ice chips?,0,1,0,0,0,0,36
+Can I have some ice to suck on?,0,1,0,0,0,0,40
+¿Me puede traer trocitos de hielo?,0,1,0,0,0,0,37
+Quisiera un vaso con hielo,0,1,0,0,0,0,38
+क्या मुझे थोड़ी बर्फ मिल सकती है?,0,1,0,0,0,0,40
+कृपया बर्फ के टुकड़े ले आइए,0,1,0,0,0,0,37
+Puis-je avoir des glaçons ?,0,1,0,0,0,0,40
+Pourriez-vous m'apporter des morceaux de glace ?,0,1,0,0,0,0,37
+I'm not feeling well,1,0,0,0,0,0,41
+Something doesn't feel right,1,0,0,0,0,0,41
+No me siento bien,1,0,0,0,0,0,41
+मेरी तबीयत ठीक नहीं है,1,0,0,0,0,0,42
+Je ne me sens pas bien,1,0,0,0,0,0,41
+I feel off today,1,0,0,0,0,0,43
+I'm really uncomfortable,1,0,0,0,0,0,44
+I can't get comfortable in this bed,1,0,0,0,0,0,45
+I feel weak and tired,1,0,0,0,0,0,46
+Me siento incómodo,1,0,0,0,0,0,44
+Algo no está bien conmigo,1,0,0,0,0,0,42
+मुझे बेचैनी हो रही है,1,0,0,0,0,0,8
+मुझे कमजोरी महसूस हो रही है,1,0,0,0,0,0,46
+Je me sens mal à l'aise,1,0,0,0,0,0,44
+Quelque chose ne va pas,1,0,0,0,0,0,42
+I can't breathe,1,0,0,1,0,0,47
+I'm having severe chest pain,1,0,0,1,0,0,48
+No puedo respirar,1,0,0,1,0,0,47
+मुझे सांस लेने में परेशानी हो रही है,1,0,0,1,0,0,47
+Je n'arrive pas à respirer,1,0,0,1,0,0,47
+"Help, I'm having trouble breathing",1,0,0,1,0,0,47
+I think I'm having a heart attack,1,0,0,1,0,0,49
+"Someone come quickly, it's an emergency",1,0,0,1,0,0,50
+I'm bleeding heavily,1,0,0,1,0,0,51
+"¡Ayuda, es una emergencia!",1,0,0,1,0,0,50
+Me falta el aire,1,0,0,1,0,0,52
+"मदद कीजिए, यह आपातकाल है",1,0,0,1,0,0,50
+मुझे बहुत ज़्यादा खून बह रहा है,1,0,0,1,0,0,51
+"Au secours, c'est une urgence !",1,0,0,1,0,0,50
+J'ai du mal à respirer,1,0,0,1,0,0,47
+There's a spill on the floor,0,0,0,0,1,0,53
+Can someone clean my room?,0,0,0,0,1,0,54
+Hay algo derramado en el piso,0,0,0,0,1,0,53
+फर्श पर कुछ गिर गया है,0,0,0,0,1,0,53
+Il y a un dégât sur le sol,0,0,0,0,1,0,55
+The bathroom is dirty,0,0,0,0,1,0,56
+My trash can is overflowing,0,0,0,0,1,0,57
+The bathroom floor is sticky,0,0,0,0,1,0,58
+Someone spilled juice all over the table,0,0,0,0,1,0,59
+El baño está sucio,0,0,0,0,1,0,56
+¿Pueden vaciar la basura?,0,0,0,0,1,0,60
+बाथरूम बहुत गंदा है,0,0,0,0,1,0,56
+कृपया मेरा कमरा साफ कर दीजिए,0,0,0,0,1,0,54
+La salle de bain est sale,0,0,0,0,1,0,56
+Pouvez-vous vider la poubelle ?,0,0,0,0,1,0,60
+I've been waiting a long time and nobody has come,0,0,1,0,0,0,61
+I pressed the call button an hour ago,0,0,1,0,0,0,62
+Llevo mucho tiempo esperando y nadie viene,0,0,1,0,0,0,61
+"मैं बहुत देर से इंतज़ार कर रहा हूँ, कोई नहीं आया",0,0,1,0,0,0,61
+J'attends depuis longtemps et personne ne vient,0,0,1,0,0,0,61
+Nobody has answered my call light,0,0,1,0,0,0,63
+I don't know who my nurse is today,0,0,1,0,0,0,64
+I asked for help twenty minutes ago and I'm still waiting,0,0,1,0,0,0,65
+Can I speak to the nurse in charge of the floor right now?,0,0,1,0,0,0,66
+Nadie ha respondido a mi llamada,0,0,1,0,0,0,63
+No sé quién es mi enfermera hoy,0,0,1,0,0,0,64
+मेरी कॉल का किसी ने जवाब नहीं दिया,0,0,1,0,0,0,63
+"आज मेरी नर्स कौन है, मुझे नहीं पता",0,0,1,0,0,0,64
+Personne n'a répondu à mon appel,0,0,1,0,0,0,63
+Je ne sais pas qui est mon infirmière aujourd'hui,0,0,1,0,0,0,64
+When is the doctor coming to see me?,0,0,0,1,0,0,67
+I have questions about my diagnosis,0,0,0,1,0,0,68
+¿Cuándo viene el médico?,0,0,0,1,0,0,67
+डॉक्टर मुझे कब देखने आएंगे?,0,0,0,1,0,0,67
+Quand est-ce que le médecin va passer ?,0,0,0,1,0,0,67
+Can the doctor explain my test results?,0,0,0,1,0,0,69
+I want to talk to my doctor about my treatment plan,0,0,0,1,0,0,70
+I'd like to ask the physician about my surgery,0,0,0,1,0,0,71
+Can the nurse practitioner come by?,0,0,0,1,0,0,72
+Tengo preguntas sobre mi diagnóstico,0,0,0,1,0,0,68
+Quiero hablar con mi doctor sobre el tratamiento,0,0,0,1,0,0,70
+मुझे अपनी रिपोर्ट के बारे में डॉक्टर से बात करनी है,0,0,0,1,0,0,70
+मेरे इलाज के बारे में डॉक्टर से सवाल हैं,0,0,0,1,0,0,70
+J'ai des questions sur mon diagnostic,0,0,0,1,0,0,68
+Le médecin peut-il m'expliquer mes résultats ?,0,0,0,1,0,0,69
+I need a blanket and some water,0,1,0,0,0,0,0
+Can someone help me to the bathroom and bring me some ice chips?,0,1,0,0,0,0,20
+Necesito una manta y un vaso de agua,0,1,0,0,0,0,0
+मुझे कंबल और पानी चाहिए,0,1,0,0,0,0,0
+J'ai besoin d'une couverture et d'un verre d'eau,0,1,0,0,0,0,0
+My TV isn't working and I'm also thirsty,0,1,0,0,0,0,73
+Could you bring me ice chips and another blanket?,0,1,0,0,0,0,36
+"I need to use the restroom, and can you turn on the TV after?",0,1,0,0,0,0,74
+Can I get more water and some crushed ice?,0,1,0,0,0,0,40
+¿Me puede ayudar a ir al baño y traerme agua?,0,1,0,0,0,0,20
+La televisión no funciona y necesito otra cobija,0,1,0,0,0,0,23
+कृपया मुझे बाथरूम ले चलिए और फिर टीवी चालू कर दीजिए,0,1,0,0,0,0,74
+क्या मुझे बर्फ के टुकड़े और एक कंबल मिल सकता है?,0,1,0,0,0,0,40
+Pouvez-vous m'aider à aller aux toilettes et m'apporter des glaçons ?,0,1,0,0,0,0,20
+Ma télé ne marche pas et j'ai besoin d'eau,0,1,0,0,0,0,73
+I'm in a lot of pain and I need some water,1,1,0,0,0,0,75
+"I feel nauseous, can someone bring me ice chips?",1,1,0,0,0,0,76
+My back hurts and I need help getting to the bathroom,1,1,0,0,0,0,77
+I don't feel well and my TV won't turn on,1,1,0,0,0,0,78
+Tengo dolor de cabeza y necesito una manta,1,1,0,0,0,0,79
+Me siento mal y necesito ir al baño,1,1,0,0,0,0,80
+मुझे दर्द हो रहा है और पानी चाहिए,1,1,0,0,0,0,75
+J'ai la nausée et j'ai besoin d'aller aux toilettes,1,1,0,0,0,0,80
+Can I get lunch and another blanket?,0,1,0,0,0,1,81
+"I'm hungry and thirsty, can I have some food and water?",0,1,0,0,0,1,82
+Can I see the menu? Also my TV isn't working,0,1,0,0,0,1,83
+"Help me to the bathroom, then I'd like breakfast",0,1,0,0,0,1,84
+"Quiero algo de comer y una cobija, por favor",0,1,0,0,0,1,85
+मुझे भूख लगी है और कंबल भी चाहिए,0,1,0,0,0,1,85
+Je voudrais le déjeuner et une couverture,0,1,0,0,0,1,85
+Pouvez-vous allumer la télé et m'apporter quelque chose à manger ?,0,1,0,0,0,1,86
+I'm hungry but my stomach really hurts,1,0,0,0,0,1,87
+Can I order dinner? Also I need pain medication,1,0,0,0,0,1,88
+"I feel nauseous, is there something light I can eat?",1,0,0,0,0,1,89
+"I'm not feeling well, can I get some soup?",1,0,0,0,0,1,90
+Tengo hambre y me duele la cabeza,1,0,0,0,0,1,87
+Necesito algo para el dolor y quiero almorzar,1,0,0,0,0,1,91
+मुझे भूख लगी है और सिर में दर्द है,1,0,0,0,0,1,87
+J'ai faim et j'ai mal au dos,1,0,0,0,0,1,87
+"I'm in pain, I'm hungry, and I need a blanket",1,1,0,0,0,1,92
+"Can I get lunch, some water, and something for my headache?",1,1,0,0,0,1,93
+"I feel sick, I'm cold, and I haven't eaten all day",1,1,0,0,0,1,94
+"My stomach hurts, my TV is broken, and I'd like dinner",1,1,0,0,0,1,95
+"Tengo dolor, tengo hambre y necesito ir al baño",1,1,0,0,0,1,92
+"Necesito agua, comida y algo para las náuseas",1,1,0,0,0,1,93
+"मुझे दर्द है, भूख लगी है और कंबल चाहिए",1,1,0,0,0,1,92
+"J'ai mal, j'ai faim et j'ai besoin d'une couverture",1,1,0,0,0,1,92
+There's a spill by my bed and I need another blanket,0,1,0,0,1,0,96
+The bathroom is dirty and I need help getting there,0,1,0,0,1,0,97
+Hay agua en el piso y necesito una cobija,0,1,0,0,1,0,98
+La poubelle déborde et j'ai besoin d'eau,0,1,0,0,1,0,98
+My lunch tray has no utensils and the trash is full,0,0,0,0,1,1,99
+"I spilled my soup everywhere, can I get another bowl?",0,0,0,0,1,1,100
+"मेरा खाना फर्श पर गिर गया, क्या मुझे दूसरा मिल सकता है?",0,0,0,0,1,1,101
+I've been waiting 30 minutes for help to the bathroom,0,1,1,0,0,0,102
+Llevo una hora esperando una cobija,0,1,1,0,0,0,103
+J'ai demandé de l'eau il y a une heure et personne n'est venu,0,1,1,0,0,0,104
+I asked for pain medicine an hour ago and nobody came,1,0,1,0,0,0,105
+Pedí algo para las náuseas hace mucho y nadie ha venido,1,0,1,0,0,0,106
+"मैंने दर्द की दवा एक घंटे पहले मांगी थी, कोई नहीं आया",1,0,1,0,0,0,105
+My pain is getting worse and I want the doctor to look at it,1,0,0,1,0,0,107
+"Me siento peor que ayer, quiero ver al médico",1,0,0,1,0,0,108
+"Mon incision est rouge et gonflée, le médecin peut-il venir ?",1,0,0,1,0,0,109
+I've been waiting over an hour for someone to answer my call light,0,0,1,0,0,0,110
+No one has checked on me since this morning,0,0,1,0,0,0,111
+Who is in charge of this floor today?,0,0,1,0,0,0,112
+I keep pressing the button and nobody shows up,0,0,1,0,0,0,113
+My nurse went on break and nobody is covering for her,0,0,1,0,0,0,114
+I'd like to request a different nurse for my next shift,0,0,1,0,0,0,115
+Can I talk to whoever is running the unit tonight?,0,0,1,0,0,0,116
+Nadie ha venido a verme desde la mañana,0,0,1,0,0,0,111
+¿Quién está a cargo del piso hoy?,0,0,1,0,0,0,112
+Sigo presionando el botón y nadie aparece,0,0,1,0,0,0,113
+सुबह से कोई मुझे देखने नहीं आया,0,0,1,0,0,0,111
+आज इस मंज़िल का इंचार्ज कौन है?,0,0,1,0,0,0,112
+मैं बार-बार बटन दबा रहा हूँ पर कोई नहीं आता,0,0,1,0,0,0,113
+Personne n'est venu me voir depuis ce matin,0,0,1,0,0,0,111
+Qui est responsable de l'étage aujourd'hui ?,0,0,1,0,0,0,112
+Nobody answered my call light again and I want to file a complaint,0,0,1,0,0,0,117
+"This is the third night in a row I've waited hours for help, I want a supervisor",0,0,1,0,0,0,118
+I've been ignored all day and I want to report it,0,0,1,0,0,0,119
+"The night staff never come when I call, someone needs to fix this",0,0,1,0,0,0,120
+I waited two hours for help and the staff were rude about it,0,0,1,0,0,0,121
+I want to talk to the charge nurse and the manager about how long I've been waiting,0,0,1,0,0,0,66
+"Every time I ring the bell it takes forever, I want this escalated",0,0,1,0,0,0,122
+Nadie contesta mi llamada otra vez y quiero poner una queja,0,0,1,0,0,0,117
+"Llevo horas esperando todos los días, quiero hablar con un supervisor",0,0,1,0,0,0,123
+Me han ignorado todo el día y quiero reportarlo,0,0,1,0,0,0,119
+"फिर से किसी ने मेरी कॉल का जवाब नहीं दिया, मैं शिकायत करना चाहता हूँ",0,0,1,0,0,0,117
+"मुझे रोज़ घंटों इंतज़ार करना पड़ता है, मुझे सुपरवाइज़र से बात करनी है",0,0,1,0,0,0,123
+"पूरे दिन मुझे नज़रअंदाज़ किया गया, मैं इसकी रिपोर्ट करना चाहता हूँ",0,0,1,0,0,0,119
+"Personne ne répond encore à mon appel, je veux porter plainte",0,0,1,0,0,0,117
+"J'attends des heures chaque nuit, je veux parler à un responsable",0,0,1,0,0,0,123
+Can I be moved to a private room?,0,0,1,0,0,0,124
+"My roommate snores all night, can I switch rooms?",0,0,1,0,0,0,125
+Which nurse is assigned to me this shift?,0,0,1,0,0,0,115
+I haven't seen a nurse since shift change,0,0,1,0,0,0,126
+Is there a quieter room available on this floor?,0,0,1,0,0,0,127
+"My nurse seems overwhelmed, can someone else help her?",0,0,1,0,0,0,128
+Can my wife stay overnight in my room?,0,0,1,0,0,0,129
+Can my family visit after visiting hours tonight?,0,0,1,0,0,0,130
+"I was told I'd be transferred to another unit, when is that happening?",0,0,1,0,0,0,131
+The nurse said she'd be right back but that was forty-five minutes ago,0,0,1,0,0,0,132
+Nobody told me who my nurse is tonight,0,0,1,0,0,0,64
+Can you find out why nobody is answering the call bell?,0,0,1,0,0,0,133
+"I'd prefer a female nurse, is that possible?",0,0,1,0,0,0,134
+"My roommate's TV is blasting and I can't sleep, can I move?",0,0,1,0,0,0,135
+Who can I talk to about how this unit is being run tonight?,0,0,1,0,0,0,116
+It's been ages since anyone came by to check on me,0,0,1,0,0,0,136
+My nurse keeps changing every few hours and I'm confused,0,0,1,0,0,0,137
+Can someone coordinate my care? Everyone tells me something different,0,0,1,0,0,0,138
+I need to speak to whoever is supervising the nurses right now,0,0,1,0,0,0,66
+Can my son bring our dog in to visit?,0,0,1,0,0,0,139
+"I've been sitting in the hallway bed for hours, when will I get a room?",0,0,1,0,0,0,140
+Why does it take so long for anyone to respond on this floor?,0,0,1,0,0,0,141
+"I asked to be moved closer to the nurses' station, has that been approved?",0,0,1,0,0,0,142
+The night shift never introduced themselves to me,0,0,1,0,0,0,143
+Can more than two visitors come in at once?,0,0,1,0,0,0,144
+¿Puedo cambiarme a una habitación privada?,0,0,1,0,0,0,124
+¿Qué enfermera me toca en este turno?,0,0,1,0,0,0,115
+No he visto a ninguna enfermera desde el cambio de turno,0,0,1,0,0,0,126
+¿Puede mi esposo quedarse a dormir conmigo?,0,0,1,0,0,0,145
+"Mi compañero de cuarto ronca mucho, ¿me pueden cambiar?",0,0,1,0,0,0,146
+¿Cuándo me van a trasladar a otra unidad?,0,0,1,0,0,0,131
+"Prefiero una enfermera mujer, ¿es posible?",0,0,1,0,0,0,134
+La enfermera dijo que volvía enseguida y ya pasó casi una hora,0,0,1,0,0,0,132
+¿Mi familia puede visitarme después del horario?,0,0,1,0,0,0,130
+Quiero hablar con quien supervisa a las enfermeras ahora,0,0,1,0,0,0,66
+क्या मुझे अलग कमरा मिल सकता है?,0,0,1,0,0,0,147
+इस शिफ़्ट में मेरी नर्स कौन है?,0,0,1,0,0,0,115
+शिफ़्ट बदलने के बाद से कोई नर्स नहीं आई,0,0,1,0,0,0,126
+क्या मेरी पत्नी रात को मेरे साथ रुक सकती है?,0,0,1,0,0,0,129
+"मेरे कमरे का साथी बहुत खर्राटे लेता है, क्या मेरा कमरा बदल सकता है?",0,0,1,0,0,0,148
+मुझे दूसरे वार्ड में कब भेजा जाएगा?,0,0,1,0,0,0,131
+क्या मुझे महिला नर्स मिल सकती है?,0,0,1,0,0,0,134
+"नर्स ने कहा था अभी आती हूँ, पर एक घंटा हो गया",0,0,1,0,0,0,132
+क्या मेरा परिवार मिलने के समय के बाद आ सकता है?,0,0,1,0,0,0,130
+मुझे नर्सों के इंचार्ज से अभी बात करनी है,0,0,1,0,0,0,66
+Puis-je avoir une chambre individuelle ?,0,0,1,0,0,0,147
+Quelle infirmière s'occupe de moi pendant ce service ?,0,0,1,0,0,0,115
+Je n'ai vu aucune infirmière depuis la relève,0,0,1,0,0,0,126
+Mon mari peut-il rester dormir avec moi ?,0,0,1,0,0,0,145
+"Mon voisin de chambre ronfle, puis-je changer de chambre ?",0,0,1,0,0,0,148
+Quand serai-je transféré dans un autre service ?,0,0,1,0,0,0,131
+"Je préférerais une infirmière, est-ce possible ?",0,0,1,0,0,0,134
+"L'infirmière a dit qu'elle revenait tout de suite, ça fait presque une heure",0,0,1,0,0,0,132
+Ma famille peut-elle venir après les heures de visite ?,0,0,1,0,0,0,130
+Je veux parler à la personne qui encadre les infirmières ce soir,0,0,1,0,0,0,66
+My IV pump keeps beeping,1,0,0,0,0,0,149
+My IV site is swollen and sore,1,0,0,0,0,0,150
+Is it time for my evening medications?,1,0,0,0,0,0,151
+"My bandage is soaked through, can someone change it?",1,0,0,0,0,0,152
+Can someone check my blood sugar?,1,0,0,0,0,0,153
+Mi suero se terminó y la máquina está sonando,1,0,0,0,0,0,154
+¿Me pueden cambiar el vendaje?,1,0,0,0,0,0,155
+मेरी ड्रिप की मशीन बार-बार बीप कर रही है,1,0,0,0,0,0,154
+क्या मेरी शाम की दवा का समय हो गया है?,1,0,0,0,0,0,151
+Ma perfusion est terminée et la machine sonne,1,0,0,0,0,0,154
+Pouvez-vous vérifier ma glycémie ?,1,0,0,0,0,0,153
+I ordered breakfast two hours ago and it never came,0,0,1,0,0,1,156
+My lunch still hasn't arrived and it's almost dinner time,0,0,1,0,0,1,157
+I've been waiting forever for my meal tray,0,0,1,0,0,1,158
+I called down for food an hour ago and nobody brought anything,0,0,1,0,0,1,159
+Everyone else got dinner but I'm still waiting for mine,0,0,1,0,0,1,160
+"My food order seems to have been lost, it's been ages",0,0,1,0,0,1,161
+I asked for a snack a long time ago and nobody came back,0,0,1,0,0,1,162
+Pedí el desayuno hace dos horas y nunca llegó,0,0,1,0,0,1,156
+Mi almuerzo todavía no ha llegado,0,0,1,0,0,1,157
+Llevo una hora esperando mi bandeja de comida,0,0,1,0,0,1,158
+"मैंने दो घंटे पहले नाश्ता मंगवाया था, अब तक नहीं आया",0,0,1,0,0,1,156
+मेरा दोपहर का खाना अभी तक नहीं आया,0,0,1,0,0,1,157
+मैं बहुत देर से अपने खाने का इंतज़ार कर रहा हूँ,0,0,1,0,0,1,158
+J'ai commandé mon petit-déjeuner il y a deux heures et rien n'est arrivé,0,0,1,0,0,1,156
+Mon déjeuner n'est toujours pas arrivé,0,0,1,0,0,1,157
+My room has been dirty for three days and I want to complain,0,0,0,0,1,0,163
+I keep asking for the bathroom to be cleaned and it never happens,0,0,0,0,1,0,164
+"The trash hasn't been emptied since I got here, this is unacceptable",0,0,0,0,1,0,165
+"There's still a stain on the floor I reported yesterday, I want to talk to a manager",0,0,0,0,1,0,166
+"The bathroom smells terrible and nobody cares, I'm filing a complaint",0,0,0,0,1,0,167
+Housekeeping skipped my room again today,0,0,0,0,1,0,168
+I've reported the dirty floor twice and nothing has been done,0,0,0,0,1,0,169
+Mi cuarto lleva tres días sucio y quiero quejarme,0,0,0,0,1,0,163
+Siempre pido que limpien el baño y nunca lo hacen,0,0,0,0,1,0,164
+"No han sacado la basura desde que llegué, es inaceptable",0,0,0,0,1,0,165
+"मेरा कमरा तीन दिन से गंदा है, मैं शिकायत करना चाहता हूँ",0,0,0,0,1,0,163
+मैं बार-बार बाथरूम साफ़ करने को कहता हूँ पर कोई नहीं करता,0,0,0,0,1,0,164
+"जब से मैं आया हूँ कूड़ा नहीं उठाया गया, यह ठीक नहीं है",0,0,0,0,1,0,170
+"Ma chambre est sale depuis trois jours, je veux me plaindre",0,0,0,0,1,0,163
+Je demande sans cesse qu'on nettoie la salle de bain et rien n'est fait,0,0,0,0,1,0,164
+They keep bringing me food I'm allergic to and I want to complain,1,0,0,0,0,1,171
+"Every meal has been cold this week, I want to speak to someone about it",0,0,0,0,0,1,172
+I've told them three times I'm diabetic and they still send desserts,0,0,0,0,0,1,173
+The food here is awful and nobody listens when I complain,0,0,0,0,0,1,174
+My meal orders are wrong every single day,0,0,0,0,0,1,175
+"I asked for halal meals and they keep sending pork, this is unacceptable",0,0,0,0,0,1,176
+I want to report that my dietary restrictions keep being ignored,0,0,0,0,0,1,177
+Siempre me traen comida a la que soy alérgico y quiero quejarme,1,0,0,0,0,1,171
+"Toda la comida ha llegado fría esta semana, quiero hablar con alguien",0,0,0,0,0,1,172
+Mis pedidos de comida vienen mal todos los días,0,0,0,0,0,1,175
+"मुझे बार-बार वही खाना भेजा जाता है जिससे मुझे एलर्जी है, मैं शिकायत करना चाहता हूँ",1,0,0,0,0,1,171
+"मैंने कई बार कहा कि मैं शाकाहारी हूँ, फिर भी मांस भेजा जाता है",0,0,0,0,0,1,178
+हर दिन मेरा खाने का ऑर्डर गलत आता है,0,0,0,0,0,1,175
+"On m'apporte toujours des plats auxquels je suis allergique, je veux me plaindre",1,0,0,0,0,1,171
+"Mes repas sont froids tous les jours, je veux en parler à un responsable",0,0,0,0,0,1,172
+Can housekeeping come clean my room?,0,0,0,0,1,0,54
+There's water all over the bathroom floor,0,0,0,0,1,0,58
+The toilet is clogged,0,0,0,0,1,0,179
+The sink is clogged and dirty,0,0,0,0,1,0,56
+Someone tracked mud across my floor,0,0,0,0,1,0,180
+There's broken glass on the floor,0,0,0,0,1,0,181
+The trash smells really bad,0,0,0,0,1,0,182
+My room hasn't been cleaned today,0,0,0,0,1,0,183
+Can someone mop the floor? It's slippery,0,0,0,0,1,0,184
+There's a puddle near the door,0,0,0,0,1,0,185
+The shower is moldy,0,0,0,0,1,0,186
+Coffee got spilled all over the chair,0,0,0,0,1,0,187
+The window is filthy,0,0,0,0,1,0,188
+There are crumbs and wrappers everywhere,0,0,0,0,1,0,189
+The bathroom needs more toilet paper and paper towels,0,0,0,0,1,0,190
+Can someone empty the trash bin?,0,0,0,0,1,0,60
+There's something sticky on my bedside table,0,0,0,0,1,0,191
+The floor by my bed is wet,0,0,0,0,1,0,192
+The room smells like urine,0,0,0,0,1,0,193
+There's dust everywhere in this room,0,0,0,0,1,0,193
+Can you send someone to disinfect the bathroom?,0,0,0,0,1,0,194
+There's hair all over the shower,0,0,0,0,1,0,186
+I knocked over my juice and it's all over the floor,0,0,0,0,1,0,195
+The hand sanitizer dispenser is empty,0,0,0,0,1,0,196
+There's a bug in my room,0,0,0,0,1,0,197
+¿Puede venir alguien a limpiar mi habitación?,0,0,0,0,1,0,54
+Hay agua por todo el piso del baño,0,0,0,0,1,0,58
+El inodoro está tapado,0,0,0,0,1,0,198
+Hay vidrios rotos en el suelo,0,0,0,0,1,0,181
+La basura huele muy mal,0,0,0,0,1,0,182
+No han limpiado mi cuarto hoy,0,0,0,0,1,0,183
+"El piso está resbaloso, ¿pueden trapearlo?",0,0,0,0,1,0,184
+La ducha tiene moho,0,0,0,0,1,0,186
+Se derramó café en la silla,0,0,0,0,1,0,187
+Se acabó el papel higiénico,0,0,0,0,1,0,199
+La habitación huele a orina,0,0,0,0,1,0,193
+Hay un insecto en mi cuarto,0,0,0,0,1,0,197
+क्या कोई मेरा कमरा साफ़ करने आ सकता है?,0,0,0,0,1,0,54
+बाथरूम के फ़र्श पर पानी भरा है,0,0,0,0,1,0,58
+टॉयलेट जाम हो गया है,0,0,0,0,1,0,179
+फ़र्श पर टूटा हुआ काँच पड़ा है,0,0,0,0,1,0,181
+कूड़ेदान से बहुत बदबू आ रही है,0,0,0,0,1,0,182
+आज मेरा कमरा साफ़ नहीं हुआ,0,0,0,0,1,0,183
+"फ़र्श फिसलन भरा है, कृपया पोछा लगा दीजिए",0,0,0,0,1,0,200
+शॉवर में फफूंद लगी है,0,0,0,0,1,0,201
+कुर्सी पर चाय गिर गई है,0,0,0,0,1,0,187
+टॉयलेट पेपर खत्म हो गया है,0,0,0,0,1,0,199
+कमरे में पेशाब की बदबू आ रही है,0,0,0,0,1,0,193
+Quelqu'un peut venir nettoyer ma chambre ?,0,0,0,0,1,0,54
+Il y a de l'eau partout sur le sol de la salle de bain,0,0,0,0,1,0,58
+Les toilettes sont bouchées,0,0,0,0,1,0,179
+Il y a du verre cassé par terre,0,0,0,0,1,0,181
+La poubelle sent très mauvais,0,0,0,0,1,0,182
+Ma chambre n'a pas été nettoyée aujourd'hui,0,0,0,0,1,0,183
+"Le sol est glissant, pouvez-vous passer la serpillière ?",0,0,0,0,1,0,184
+Il y a de la moisissure dans la douche,0,0,0,0,1,0,186
+Du café s'est renversé sur le fauteuil,0,0,0,0,1,0,187
+Il n'y a plus de papier toilette,0,0,0,0,1,0,199
+Il y a un insecte dans ma chambre,0,0,0,0,1,0,197
+"I dropped my dinner tray on the floor, can I get a new one?",0,0,0,0,1,1,101
+My juice spilled all over the table and I'd like another,0,0,0,0,1,1,202
+Can someone take away my old food trays and bring me a snack?,0,0,0,0,1,1,203
+"The soup spilled everywhere, can you clean it and send another bowl?",0,0,0,0,1,1,100
+My breakfast fell off the table and the floor is a mess,0,0,0,0,1,1,204
+"I knocked my coffee over, I need a new cup and the floor cleaned",0,0,0,0,1,1,205
+There's spilled milk on the floor and I still want my milk,0,0,0,0,1,1,206
+"Se me cayó la bandeja de la cena al piso, ¿me traen otra?",0,0,0,0,1,1,101
+Se derramó mi jugo en la mesa y quisiera otro,0,0,0,0,1,1,202
+"La sopa se cayó por todas partes, ¿pueden limpiar y traer otra?",0,0,0,0,1,1,100
+"मेरी खाने की थाली फ़र्श पर गिर गई, क्या नई मिल सकती है?",0,0,0,0,1,1,101
+"मेरा जूस मेज़ पर गिर गया, मुझे दूसरा चाहिए",0,0,0,0,1,1,207
+मेरा नाश्ता गिर गया और फ़र्श गंदा हो गया,0,0,0,0,1,1,204
+"J'ai fait tomber mon plateau-repas, puis-je en avoir un autre ?",0,0,0,0,1,1,101
+"Mon jus s'est renversé sur la table, j'en voudrais un autre",0,0,0,0,1,1,202
+I threw up all over the floor and I still feel sick,1,0,0,0,1,0,208
+I vomited in the bathroom and I feel dizzy,1,0,0,0,1,0,209
+There's blood on the floor from my IV site and it's still bleeding,1,0,0,0,1,0,210
+I got sick on the floor and my stomach really hurts,1,0,0,0,1,0,208
+Vomité en el piso y todavía me siento mal,1,0,0,0,1,0,208
+Hay sangre en el suelo y mi herida sigue sangrando,1,0,0,0,1,0,210
+मैंने फ़र्श पर उल्टी कर दी और अब भी जी मिचला रहा है,1,0,0,0,1,0,211
+फ़र्श पर खून है और मेरा घाव अभी भी बह रहा है,1,0,0,0,1,0,210
+J'ai vomi par terre et j'ai encore la nausée,1,0,0,0,1,0,211
+Il y a du sang par terre et ma plaie saigne encore,1,0,0,0,1,0,210
+What's on the dinner menu tonight?,0,0,0,0,0,1,212
+Can I order a sandwich?,0,0,0,0,0,1,213
+Do you have gluten-free options?,0,0,0,0,0,1,214
+I'd like to order my meals for tomorrow,0,0,0,0,0,1,215
+Can I get a cup of coffee with breakfast?,0,0,0,0,0,1,19
+Is there a low-sodium meal I can order?,0,0,0,0,0,1,216
+Can I get some fruit?,0,0,0,0,0,1,217
+"I didn't like my lunch, can I order something else?",0,0,0,0,0,1,218
+Can I have extra bread with my dinner?,0,0,0,0,0,1,219
+What time does the kitchen stop taking orders?,0,0,0,0,0,1,220
+¿Qué hay en el menú de la cena?,0,0,0,0,0,1,212
+¿Puedo pedir un sándwich?,0,0,0,0,0,1,213
+¿Tienen opciones sin gluten?,0,0,0,0,0,1,214
+Quisiera un café con el desayuno,0,0,0,0,0,1,19
+¿Me pueden traer fruta?,0,0,0,0,0,1,217
+आज रात के खाने में क्या है?,0,0,0,0,0,1,212
+क्या मैं एक सैंडविच मंगवा सकता हूँ?,0,0,0,0,0,1,213
+क्या कम नमक वाला खाना मिल सकता है?,0,0,0,0,0,1,221
+मुझे नाश्ते के साथ चाय चाहिए,0,0,0,0,0,1,19
+क्या मुझे कुछ फल मिल सकते हैं?,0,0,0,0,0,1,217
+Qu'y a-t-il au menu ce soir ?,0,0,0,0,0,1,212
+Est-ce que je peux commander un sandwich ?,0,0,0,0,0,1,213
+Avez-vous des plats sans gluten ?,0,0,0,0,0,1,214
+Je voudrais un café avec mon petit-déjeuner,0,0,0,0,0,1,19
+Can the doctor clear me to eat? I'm starving,0,0,0,1,0,1,222
+"I'm on a liquid diet, can I ask the doctor if I can have real food?",0,0,0,1,0,1,223
+When will the doctor let me eat solid food? I'd like to order lunch,0,0,0,1,0,1,224
+Can my doctor change my diet so I can order a regular meal?,0,0,0,1,0,1,225
+¿El médico puede autorizarme a comer? Tengo mucha hambre,0,0,0,1,0,1,222
+¿Cuándo me dejará el doctor comer comida sólida?,0,0,0,1,0,1,224
+क्या डॉक्टर मुझे खाना खाने की इजाज़त दे सकते हैं? मुझे बहुत भूख लगी है,0,0,0,1,0,1,222
+डॉक्टर मुझे ठोस खाना कब खाने देंगे?,0,0,0,1,0,1,224
+Le médecin peut-il m'autoriser à manger ? J'ai très faim,0,0,0,1,0,1,222
+Quand le médecin me laissera-t-il manger normalement ?,0,0,0,1,0,1,224
+My incision is leaking and I want the surgeon to see it,1,0,0,1,0,0,226
+"I've had a fever all night, can the doctor come?",1,0,0,1,0,0,227
+"My leg is swollen and painful, I want a doctor to check it",1,0,0,1,0,0,228
+"The new medicine is making me itchy and dizzy, can the doctor review it?",1,0,0,1,0,0,229
+"Tengo fiebre desde anoche, ¿puede venir el doctor?",1,0,0,1,0,0,227
+"Mi pierna está hinchada y me duele, quiero que me vea un médico",1,0,0,1,0,0,228
+"मुझे रात भर से बुखार है, क्या डॉक्टर आ सकते हैं?",1,0,0,1,0,0,227
+"मेरा पैर सूजा हुआ है और दर्द है, डॉक्टर को दिखाना है",1,0,0,1,0,0,228
+"J'ai de la fièvre depuis cette nuit, le médecin peut-il venir ?",1,0,0,1,0,0,227
+"Ma jambe est enflée et douloureuse, je veux voir un médecin",1,0,0,1,0,0,228
+When can I be discharged?,0,0,0,1,0,0,230
+I want to know when I can go home,0,0,0,1,0,0,231
+Can the doctor explain why I'm on this medication?,0,0,0,1,0,0,232
+Has the doctor reviewed my scan yet?,0,0,0,1,0,0,233
+I'd like a second opinion on my diagnosis,0,0,0,1,0,0,234
+Can I talk to the surgeon before my operation?,0,0,0,1,0,0,71
+What did my blood work show?,0,0,0,1,0,0,235
+Is the doctor going to round on me today?,0,0,0,1,0,0,67
+I want to discuss stopping one of my medications with the doctor,0,0,0,1,0,0,236
+Can the resident come back and answer a few questions?,0,0,0,1,0,0,237
+Who is my attending physician?,0,0,0,1,0,0,238
+I need the doctor to sign my discharge paperwork,0,0,0,1,0,0,239
+Can the PA explain the procedure to me again?,0,0,0,1,0,0,240
+I'd like to know the results of my biopsy,0,0,0,1,0,0,241
+My family wants to speak with the doctor about my prognosis,0,0,0,1,0,0,242
+Can the doctor call my daughter with an update?,0,0,0,1,0,0,243
+I have questions about the side effects of my treatment,0,0,0,1,0,0,244
+Will I need surgery? I want to ask the doctor,0,0,0,1,0,0,71
+Can the doctor refill my home prescription before I leave?,0,0,0,1,0,0,245
+I need a doctor's note for work,0,0,0,1,0,0,246
+How long does the doctor think I'll be in the hospital?,0,0,0,1,0,0,67
+Can the specialist come see me today?,0,0,0,1,0,0,67
+I want to go over my MRI results with the physician,0,0,0,1,0,0,247
+Can the hospitalist stop by this afternoon?,0,0,0,1,0,0,248
+I'm confused about my diagnosis and need the doctor to explain it,0,0,0,1,0,0,68
+Can I see the cardiologist?,0,0,0,1,0,0,249
+I'd like to talk about my pain management plan with the doctor,0,0,0,1,0,0,70
+Can the doctor tell me if I can shower with my stitches?,0,0,0,1,0,0,250
+¿Cuándo me pueden dar de alta?,0,0,0,1,0,0,251
+Quiero saber cuándo puedo irme a casa,0,0,0,1,0,0,231
+¿El médico ya revisó mi tomografía?,0,0,0,1,0,0,233
+Quisiera una segunda opinión sobre mi diagnóstico,0,0,0,1,0,0,234
+¿Puedo hablar con el cirujano antes de la operación?,0,0,0,1,0,0,71
+¿Qué salió en mis análisis de sangre?,0,0,0,1,0,0,235
+¿El doctor va a pasar a verme hoy?,0,0,0,1,0,0,67
+¿Quién es mi médico de cabecera aquí?,0,0,0,1,0,0,238
+Necesito que el doctor firme mi alta,0,0,0,1,0,0,252
+Quiero saber los resultados de mi biopsia,0,0,0,1,0,0,241
+Mi familia quiere hablar con el médico sobre mi pronóstico,0,0,0,1,0,0,242
+Tengo preguntas sobre los efectos secundarios del tratamiento,0,0,0,1,0,0,244
+Necesito una nota médica para el trabajo,0,0,0,1,0,0,246
+¿Puede venir el especialista hoy?,0,0,0,1,0,0,253
+मुझे अस्पताल से छुट्टी कब मिलेगी?,0,0,0,1,0,0,254
+मैं जानना चाहता हूँ कि मैं घर कब जा सकता हूँ,0,0,0,1,0,0,231
+क्या डॉक्टर ने मेरा स्कैन देख लिया है?,0,0,0,1,0,0,233
+मुझे अपनी बीमारी के बारे में दूसरी राय चाहिए,0,0,0,1,0,0,234
+क्या मैं ऑपरेशन से पहले सर्जन से बात कर सकता हूँ?,0,0,0,1,0,0,71
+मेरी खून की जाँच में क्या आया?,0,0,0,1,0,0,235
+क्या डॉक्टर आज मुझे देखने आएंगे?,0,0,0,1,0,0,67
+मेरे मुख्य डॉक्टर कौन हैं?,0,0,0,1,0,0,238
+मुझे डिस्चार्ज के कागज़ों पर डॉक्टर के हस्ताक्षर चाहिए,0,0,0,1,0,0,239
+मुझे अपनी बायोप्सी का नतीजा जानना है,0,0,0,1,0,0,241
+मेरा परिवार डॉक्टर से मेरी हालत के बारे में बात करना चाहता है,0,0,0,1,0,0,242
+मुझे इलाज के साइड इफ़ेक्ट्स के बारे में पूछना है,0,0,0,1,0,0,244
+क्या विशेषज्ञ डॉक्टर आज आ सकते हैं?,0,0,0,1,0,0,253
+Quand est-ce que je pourrai sortir de l'hôpital ?,0,0,0,1,0,0,254
+Je veux savoir quand je peux rentrer chez moi,0,0,0,1,0,0,231
+Le médecin a-t-il regardé mon scanner ?,0,0,0,1,0,0,233
+Je voudrais un deuxième avis sur mon diagnostic,0,0,0,1,0,0,234
+Puis-je parler au chirurgien avant l'opération ?,0,0,0,1,0,0,71
+Qu'ont montré mes analyses de sang ?,0,0,0,1,0,0,235
+Le médecin va-t-il passer me voir aujourd'hui ?,0,0,0,1,0,0,67
+Qui est mon médecin référent ?,0,0,0,1,0,0,238
+J'ai besoin que le médecin signe ma sortie,0,0,0,1,0,0,252
+Je voudrais connaître les résultats de ma biopsie,0,0,0,1,0,0,241
+Ma famille veut parler au médecin de mon pronostic,0,0,0,1,0,0,242
+J'ai des questions sur les effets secondaires de mon traitement,0,0,0,1,0,0,244
+Le spécialiste peut-il venir me voir aujourd'hui ?,0,0,0,1,0,0,67
+Can you turn the heat up in here?,0,1,0,0,0,0,255
+This room is way too cold for me,0,1,0,0,0,0,255
+Could you help me sit up in bed?,0,1,0,0,0,0,256
+Can someone help me move into the chair?,0,1,0,0,0,0,257
+I'd like to walk the hallway but I need someone with me,0,1,0,0,0,0,258
+Can I get new batteries for the TV remote?,0,1,0,0,0,0,259
+¿Pueden subir la calefacción? Hace frío,0,1,0,0,0,0,255
+¿Me ayudan a sentarme en la silla?,0,1,0,0,0,0,257
+"कमरे में बहुत ठंड है, हीटर चला दीजिए",0,1,0,0,0,0,255
+मुझे बिस्तर से उठकर कुर्सी पर बैठना है,0,1,0,0,0,0,260
+"Il fait froid ici, pouvez-vous monter le chauffage ?",0,1,0,0,0,0,255
+Pouvez-vous m'aider à m'asseoir dans le fauteuil ?,0,1,0,0,0,0,257
+I feel a little dizzy,1,0,0,0,0,0,8
+I get lightheaded every time I stand up,1,0,0,0,0,0,261
+Estoy un poco mareada,1,0,0,0,0,0,8
+मुझे हल्का चक्कर आ रहा है,1,0,0,0,0,0,8
+J'ai un peu la tête qui tourne,1,0,0,0,0,0,8
+There's a heavy pressure in my chest,1,0,0,1,0,0,262
+I feel like I might pass out,1,0,0,1,0,0,263
+I almost blacked out when I stood up,1,0,0,1,0,0,264
+My heart is racing and it won't slow down,1,0,0,1,0,0,265
+I'm short of breath even lying still,1,0,0,1,0,0,47
+Siento una opresión fuerte en el pecho,1,0,0,1,0,0,266
+Creo que me voy a desmayar,1,0,0,1,0,0,267
+Me cuesta mucho respirar,1,0,0,1,0,0,47
+मुझे लग रहा है कि मैं बेहोश हो जाऊँगा,1,0,0,1,0,0,267
+सीने में बहुत भारीपन है,1,0,0,1,0,0,268
+Je sens que je vais tomber dans les pommes,1,0,0,1,0,0,269
+J'ai le cœur qui bat très vite,1,0,0,1,0,0,265
+Why did they switch my blood pressure medicine?,0,0,0,1,0,0,270
+What did the ultrasound show?,0,0,0,1,0,0,271
+Will I need physical therapy or rehab after I leave?,0,0,0,1,0,0,272
+I want to understand what my diagnosis actually means,0,0,0,1,0,0,68
+Is it safe for me to take my home medications here?,0,0,0,1,0,0,273
+I'd like to talk about whether I really need this surgery,0,0,0,1,0,0,71
+When will I find out if the infection is gone?,0,0,0,1,0,0,274
+¿Por qué me cambiaron la medicina de la presión?,0,0,0,1,0,0,270
+¿Voy a necesitar terapia física después del alta?,0,0,0,1,0,0,272
+"मेरी दवा क्यों बदली गई, डॉक्टर से जानना है",0,0,0,1,0,0,275
+क्या मुझे घर जाने के बाद फिज़ियोथेरेपी की ज़रूरत होगी?,0,0,0,1,0,0,276
+Pourquoi a-t-on changé mon traitement pour la tension ?,0,0,0,1,0,0,270
+Est-ce que j'aurai besoin de rééducation après ma sortie ?,0,0,0,1,0,0,277
+Le médecin peut-il passer pour parler de mon opération ?,0,0,0,1,0,0,71
+It's been forever since I pushed the call button,0,0,1,0,0,0,62
+Is anyone actually working on this floor tonight?,0,0,1,0,0,0,278
+I'm unhappy with the way a staff member spoke to me,0,0,1,0,0,0,279
+Who do I talk to about a problem with my care here?,0,0,1,0,0,0,280
+Staff keep forgetting what I ask for,0,0,1,0,0,0,281
+No estoy contento con cómo me habló una enfermera,0,0,1,0,0,0,282
+मेरी घंटी का जवाब देने में हमेशा बहुत देर लगती है,0,0,1,0,0,0,283
+"किसी स्टाफ ने मुझसे बदतमीज़ी से बात की, मुझे शिकायत करनी है",0,0,1,0,0,0,279
+Je ne suis pas content de la façon dont on m'a parlé,0,0,1,0,0,0,284
+Nobody came when my IV alarm went off,1,0,1,0,0,0,285
+I asked for my medicine ages ago and I'm still waiting,1,0,1,0,0,0,286
+Nadie vino cuando sonó la alarma de mi suero,1,0,1,0,0,0,285
+Personne n'est venu quand l'alarme de ma perfusion a sonné,1,0,1,0,0,0,285
+When is my next dose due?,1,0,0,0,0,0,287
+Can I have my meds now?,1,0,0,0,0,0,288
+I think I missed my 2 o'clock pill,1,0,0,0,0,0,289
+Is it time for my insulin yet?,1,0,0,0,0,0,290
+Can I take my sleeping pill now?,1,0,0,0,0,0,291
+Did I already get my blood thinner today?,1,0,0,0,0,0,292
+¿A qué hora me toca la próxima dosis?,1,0,0,0,0,0,287
+¿Me pueden dar mis pastillas ahora?,1,0,0,0,0,0,293
+Creo que no me dieron la medicina de las dos,1,0,0,0,0,0,294
+मेरी अगली दवा कब मिलेगी?,1,0,0,0,0,0,287
+क्या अभी मुझे मेरी गोलियाँ मिल सकती हैं?,1,0,0,0,0,0,288
+À quelle heure est ma prochaine dose ?,1,0,0,0,0,0,287
+Est-ce que je peux prendre mes médicaments maintenant ?,1,0,0,0,0,0,288
+"My bed is soaked, I need clean sheets",0,1,0,0,0,0,295
+Can someone change my sheets?,0,1,0,0,0,0,296
+Can I get an extra pillow?,0,1,0,0,0,0,297
+"My pillow is flat, can I have another one?",0,1,0,0,0,0,297
+I had an accident in the bed,0,1,0,0,0,0,298
+"My blankets fell on the floor, can someone fix my bed?",0,1,0,0,0,0,299
+I need a fresh gown,0,1,0,0,0,0,300
+"Mis sábanas están mojadas, ¿me las cambian?",0,1,0,0,0,0,301
+¿Me pueden traer otra almohada?,0,1,0,0,0,0,2
+Necesito una bata limpia,0,1,0,0,0,0,0
+"मेरी चादर गीली है, कृपया बदल दीजिए",0,1,0,0,0,0,301
+क्या मुझे एक और तकिया मिल सकता है?,0,1,0,0,0,0,5
+"Mes draps sont mouillés, pouvez-vous les changer ?",0,1,0,0,0,0,301
+Puis-je avoir un autre oreiller ?,0,1,0,0,0,0,5
+J'ai besoin d'une blouse propre,0,1,0,0,0,0,302
+Can I get clean sheets and some breakfast?,0,1,0,0,0,1,303
+Necesito otra almohada y algo para el dolor,1,1,0,0,0,0,304
+मेरी चादर गीली है और आधे घंटे से कोई नहीं आया,0,1,1,0,0,0,305
+"Je voudrais un oreiller et mon dîner, s'il vous plaît",0,1,0,0,0,1,85
+How do I get on the guest wifi?,0,0,0,0,0,0,306
+Where can my family park?,0,0,0,0,0,0,307
+Is there a gift shop downstairs?,0,0,0,0,0,0,308
+What's the weather supposed to be tomorrow?,0,0,0,0,0,0,309
+Who won the election?,0,0,0,0,0,0,310
+Can you recommend a good movie?,0,0,0,0,0,0,311
+What time is it in Tokyo?,0,0,0,0,0,0,312
+Tell me a joke,0,0,0,0,0,0,313
+How much does parking cost?,0,0,0,0,0,0,314
+Where is the nearest ATM?,0,0,0,0,0,0,315
+Can you order me an Uber?,0,0,0,0,0,0,316
+Do you know a good lawyer?,0,0,0,0,0,0,317
+My phone screen cracked,0,0,0,0,0,0,318
+What's two plus two?,0,0,0,0,0,0,319
+hello,0,0,0,0,0,0,320
+ok thanks,0,0,0,0,0,0,320
+qwerty,0,0,0,0,0,0,321
+zzzz,0,0,0,0,0,0,322
+¿Cuál es la contraseña del internet?,0,0,0,0,0,0,323
+¿Dónde pueden estacionar mis hijos?,0,0,0,0,0,0,307
+¿Hay una tienda de regalos?,0,0,0,0,0,0,308
+¿Quién ganó el partido de fútbol?,0,0,0,0,0,0,324
+Cuéntame un chiste,0,0,0,0,0,0,313
+hola,0,0,0,0,0,0,320
+¿Dónde hay un cajero automático?,0,0,0,0,0,0,325
+वाईफाई का पासवर्ड क्या है?,0,0,0,0,0,0,323
+पार्किंग कहाँ है?,0,0,0,0,0,0,326
+कल मौसम कैसा रहेगा?,0,0,0,0,0,0,309
+मुझे एक चुटकुला सुनाओ,0,0,0,0,0,0,313
+नमस्ते,0,0,0,0,0,0,320
+क्या यहाँ एटीएम है?,0,0,0,0,0,0,327
+Quel est le code du wifi ?,0,0,0,0,0,0,328
+Où est-ce que ma famille peut se garer ?,0,0,0,0,0,0,329
+Il y a une boutique de cadeaux ?,0,0,0,0,0,0,308
+Qui a gagné le match hier soir ?,0,0,0,0,0,0,324
+Raconte-moi une blague,0,0,0,0,0,0,313
+bonjour,0,0,0,0,0,0,320
+Où se trouve le distributeur de billets ?,0,0,0,0,0,0,330

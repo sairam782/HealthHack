@@ -1,0 +1,7 @@
+checkpoints/
+tfidf_logistic_regression_model.joblib
+setfit_multilingual_bge3_model/
+__pycache__/
+setfit_multilingual_model/
+.env
+.venv/

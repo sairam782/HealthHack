@@ -2,6 +2,10 @@
 
 Route a patient's hospital request to the right team, track the handoff, and notify the patient when staff acknowledge or complete it. Built for [Rutgers Health Hack 2026](https://ruhealthhack.com/), Ops Unleashed, Challenge 2: Inpatient Services.
 
+## Fine-tuned model source
+
+This `fine-tuned-model` branch includes our teammate’s SetFit multilingual training, dataset, evaluation and routing source under [models/setfit-multilingual](models/setfit-multilingual/README.md), with MIT attribution and a pinned source revision. It remains separate from the deployed Bedrock/Groq inference path.
+
 ## Run locally
 
 Use Node.js 24 LTS (minimum 22.13).

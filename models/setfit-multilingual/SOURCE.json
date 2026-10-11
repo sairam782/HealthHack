@@ -1,0 +1,25 @@
+{
+  "repository": "https://github.com/priyadp1/RutgersHealthHack2026",
+  "revision": "896190f899a01b5a90589c13620127bad706a337",
+  "author": "Prisha Priyadarshini",
+  "license": "MIT",
+  "huggingFaceModel": "priyadp1/setfit-multilingual",
+  "filesSha256": {
+    "classifier_model/NLP_Classifier.py": "e5ae57f335474400eccceef065bd3b18c7e19706cd8058e480c5552102041a19",
+    "classifier_model/ROUTING_POLICY.md": "b0f50aeb93f505c6486ebaa336b88449c4184038d8e57c86d49d9ab298e1cc5e",
+    "classifier_model/dataset.csv": "6812d611e573ed8903118fdf880c202bcf6a77162423d5e199866317cc3a2ec7",
+    "classifier_model/dataset_creation.py": "5273db859fce6cddd60955c79d293be218ac77f84375a639938b47f689756547",
+    "classifier_model/eval_sets.py": "a7b730f33943a51d0df0159840177ec7f4799ead4b0a656cca70b49ba0d1574c",
+    "classifier_model/evaluate_holdout.py": "3e3f297795d3cec4801f93c39fbbf3f2d95ad18d51a1d510a6e43cfd7c9aa6fe",
+    "classifier_model/evaluation.py": "660cd5ede68d29758c791fed13d209cc3bf6e99343e70667815aef548bb72d38",
+    "classifier_model/miscellaneous/logistic_regression_tf_idf.py": "30c8282869d03297aa6b446b2c7674b972eeb935809b8041ea15f72dde489b14",
+    "classifier_model/miscellaneous/sentence_fit_bge3.py": "cc10519dcea5549aec4f39fbe46490017f4e38058cf385b8fafa04c93d0582e5",
+    "classifier_model/predict.py": "152a47c82e4a559af4de8bfdf307e8ddf2bf6223e1b9a6f12a505e19bb793d9f",
+    "classifier_model/routing.py": "710c1f1ab43f33a06d003e9150b2ae50b3e8f886277fa4a8dffab8aaa6619958",
+    "LICENSE": "d84f4c2fda8efbca5bd4f9874fc0530567533e0e08b4ab840bcfb918db125f6e",
+    "requirements.txt": "5b400d23593b8512140629a11bd123d1b2423d10f22f49dc8603a9964312458f",
+    ".gitignore": "77bdb0eff83dd95ebe84aba97457e5b66d2821974586012186a3f9d4e8569a7c",
+    "README.md": "086487742ab118c9f6d97c01973623e9d7afc4b1d165a03b08635ddc164283ca"
+  },
+  "note": "Classifier source and associated documentation/dependencies only; upstream client, server and Expo app are not imported. Original source files are preserved without modification."
+}
