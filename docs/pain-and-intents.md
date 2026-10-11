@@ -1,0 +1,23 @@
+# Pain reporting and intent routing
+
+The patient can select Pain, choose a number from **1–10**, optionally describe the location and indicate new or worsening pain, then send. No number is preselected, and the patient can send without answering. The urgent nursing button remains independent. English, Spanish, Hindi, and French labels and spoken score receipts are supported. Explicit spoken/typed scale expressions can supply the score, including English number words and Devanagari digits. Numbers for rooms, medication doses, invalid scales, decimals, or conflicting transcript scores do not become guessed scores.
+
+Pain is patient-reported information for nursing assessment. Every pain request follows the existing Nursing P2 policy; chest/breathing and other recognized emergency symptoms still use P1 regardless of score. A chest pain location is also considered by the safety rule. Prototype bands (1–3 mild, 4–6 moderate, 7–10 severe) highlight the reported score; they do not establish a diagnosis, medication order, or emergency by themselves. Higher scores sort first among otherwise equal queue priority/status. The original wording, selected/transcript score source, location, and change flag are retained. If a selected score differs from the transcript, nursing sees a discrepancy note.
+
+The requested 1–10 control describes pain intensity. Clinical numeric scales commonly include 0 for no pain. [VA pain-scale guidance](https://veteranshealthlibrary.va.gov/Encyclopedia/142,84775_VA) explains the score as a patient's report and recommends communicating changes. The prototype's routing policy and severity bands require validation with the pilot unit; this is not an automated clinical assessment.
+
+## Classifier design
+
+The pipeline combines a deterministic safety/pain check, a Nova 2 Lite semantic intent extractor, and server-owned evidence/dispatch rules. It uses one configured model call for nonclinical/unclear input; recognized clinical needs bypass model latency. This is a guarded classifier, not a newly trained mixture-of-experts model or a multi-model voting ensemble.
+
+The model returns an `intents` array with a kind, department, focused English summary, and exact evidence quotes from the original request. Kinds distinguish pain, medication, clinical review, uncertainty, toileting, mobility, drinks, meals, comfort, cleaning, equipment, temperature, transport, and specialist support. Food and water remain separate intents within one Food Services task. The server validates bounds, department/kind compatibility, literal evidence, refusal/history context, clinical contamination, and confidence. It derives the primary and additional teams from validated intents, correcting an inconsistent redundant primary label. Known complete service requests retain deterministic coverage. Invalid or uncertain output stays with Nursing.
+
+The server appends diet/fluid, mobility, and transport policy checks. It does not ask a support team to deliver medication or assist mobility alongside symptoms before nursing assessment. Pain details remain only on the Nursing ticket; each generated service task carries its own intents and service text. Patients see grouped team tasks, hear one initial receipt including their reported score, and receive actual team acknowledgement/completion updates.
+
+`pain_details`, `intents`, and `routing_checks` are stored as JSON text through additive SQLite/Postgres migrations. Existing rows are preserved and display without new metadata. SQLite migration, retry, privacy, and restart behavior have been tested. Hosted Postgres remains unverified until a database is provisioned.
+
+## Evaluation
+
+Run `npm test`, `npm run evaluate`, and `npm run evaluate:intents`. For explicitly live synthetic tests, use `npm run evaluate:intents -- --live`; this consumes the configured provider's usage. The intent evaluation checks all expected departments, missing/unwanted intent kinds, wrong pain scores, emergency undertriage, and latency. Rules mode expects unfamiliar semantic cases to remain with Nursing; live mode requires their actual service teams.
+
+The October 10 live Bedrock run passed **32/32** synthetic targets, with zero missed/extra teams, wrong pain scores, or emergency downgrades. Fifteen cases used validated AI responses; sixteen recognized clinical cases bypassed AI; one vague concern used the nursing fallback. The observed p95 was 2.8 seconds. These numbers characterize this labelled regression set, not clinical safety or real-world accuracy. Reports are in ignored `artifacts/live-intent-evaluation.json` and `artifacts/rules-intent-evaluation.json`.

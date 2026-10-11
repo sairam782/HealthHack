@@ -20,7 +20,7 @@
       text = await response.text();
     } catch (error) {
       const timedOut = ['AbortError', 'TimeoutError'].includes(error.name);
-      throw failure(timedOut ? 'The connection timed out. Please retry.' : 'Cannot reach Kaalinga. Check the server connection and retry.', 0, timedOut ? 'request_timeout' : 'connection_failed');
+      throw failure(timedOut ? 'The connection timed out. Please retry.' : 'Cannot reach Kalinga. Check the server connection and retry.', 0, timedOut ? 'request_timeout' : 'connection_failed');
     }
     const contentType = (response.headers.get('content-type') || '').split(';')[0].trim();
     if (!/^application\/(?:json|[\w.-]+\+json)$/i.test(contentType)) {

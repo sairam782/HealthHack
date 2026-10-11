@@ -6,7 +6,11 @@ module.exports = async function (req, res) {
     if (!application) application = createApplication({ publicDeployment: true });
     const url = new URL(req.url, 'http://localhost');
     const route = req.query?.route || url.searchParams.get('route');
-    if (route) req.url = '/api/' + route;
+    if (route) {
+      url.searchParams.delete('route');
+      const query=url.searchParams.toString();
+      req.url='/api/'+(Array.isArray(route)?route.join('/'):route)+(query?'?'+query:'');
+    }
     return await application.handler(req, res);
   } catch (_) {
     res.statusCode = 503;

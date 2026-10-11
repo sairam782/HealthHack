@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+data/
+artifacts/
+tests/
+docs/
+.git/
+.vercel/
+node_modules/
+public/
