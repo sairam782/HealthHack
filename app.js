@@ -2,12 +2,7 @@
 const h = React.createElement;
 const {useState, useEffect, useRef} = React;
 function Logo() {
-  return h('svg', { viewBox:'0 0 32 32', width:18, height:18 },
-    h('rect', { x:0, y:0, width:32, height:32, rx:7, fill:'transparent' }),
-    h('path', { d:'M16 6C16 6 10 6 10 12C10 15 12 17 16 22C20 17 22 15 22 12C22 6 16 6 16 6Z', fill:'white', opacity:0.95 }),
-    h('circle', { cx:16, cy:12, r:2.5, fill:'var(--brand)' }),
-    h('path', { d:'M6 18 L11 18 L13 14 L15 22 L17 10 L19 18 L26 18', stroke:'white', strokeWidth:1.8, fill:'none', strokeLinecap:'round', strokeLinejoin:'round' })
-  );
+  return h('img',{className:'app-logo',src:'/assets/kalinga-logo.png',alt:'Kalinga',width:1622,height:580,decoding:'async'});
 }
 
 function ThemeSwitch() {
@@ -763,7 +758,7 @@ function App() {
     return Number(a.status==='RESOLVED')-Number(b.status==='RESOLVED') || a.priority-b.priority || statusRank[a.status]-statusRank[b.status] || (b.pain?.score||0)-(a.pain?.score||0) || Date.parse(a.created_at)-Date.parse(b.created_at);
   });
   const header=h('nav',{className:'topbar','aria-label':'Main'},
-    h('div',{className:'topbar-left'},h('div',{className:'logo-mark','aria-hidden':true},h(Logo)),h('span',{className:'logo-text'},'Kalinga'),h('span',{className:'badge badge-brand'},'OPS UNLEASHED')),
+    h('div',{className:'topbar-left'},h(Logo),h('span',{className:'badge badge-brand'},'OPS UNLEASHED')),
     h('div',{className:'topbar-right'},
       user && h('div',{className:'account-actions'},
       h('span',{className:'role-name'},user.display_name),

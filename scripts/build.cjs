@@ -4,6 +4,9 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const out = path.join(root, 'public');
 fs.mkdirSync(path.join(out, 'vendor'), { recursive: true });
+fs.mkdirSync(path.join(out, 'assets'), { recursive: true });
+fs.copyFileSync(path.join(root, 'assets/kalinga-logo.png'), path.join(out, 'assets/kalinga-logo.png'));
+fs.copyFileSync(path.join(root, 'assets/kalinga-icon.png'), path.join(out, 'assets/kalinga-icon.png'));
 for (const file of ['index.html', 'patient-assistant.js', 'pain.js', 'theme.js', 'voice-reply.js', 'video-call.js', 'transcribe-input.js', 'transcribe-worklet.js', 'upload-voice.js', 'wake-voice.js', 'app.js', 'routing.js', 'client-api.js', 'vendor/react.production.min.js', 'vendor/react-dom.production.min.js']) {
   fs.copyFileSync(path.join(root, file), path.join(out, file));
 }

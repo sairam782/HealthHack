@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kalinga</title>
+<link rel="icon" type="image/png" href="/assets/kalinga-icon.png">
+<link rel="apple-touch-icon" href="/assets/kalinga-icon.png">
 <meta name="description" content="AI-powered multilingual hospital call bell triage">
 <script src="/theme.js"></script>
 
@@ -79,9 +81,8 @@ body { margin:0; background: var(--bg); color: var(--fg); font-family: var(--fon
 /* ---- Topbar ---- */
 .topbar { height:54px; background:var(--surface); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; position:sticky; top:env(safe-area-inset-top,0px); z-index:100; }
 .topbar-left { display:flex; align-items:center; gap:10px; }
-.logo-mark { width:32px; height:32px; background:#0f766e; border-radius:8px; display:grid; place-items:center; box-shadow:0 2px 8px var(--brand-glow); flex-shrink:0; }
-.logo-mark svg { width:18px; height:18px; }
-.logo-text { font-weight:800; font-size:16px; letter-spacing:-0.04em; }
+.app-logo { display:block; width:140px; height:auto; padding:4px 6px; background:#fff; border-radius:8px; flex-shrink:0; }
+@media (max-width:600px) { .topbar-left .badge { display:none; } }
 .badge { font-family:var(--mono); font-size:10px; font-weight:700; padding:2px 7px; border-radius:4px; letter-spacing:0.03em; }
 .badge-brand { color:var(--brand); background:var(--brand-ghost); }
 .topbar-right { display:flex; align-items:center; gap:6px; }
