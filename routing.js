@@ -323,5 +323,11 @@ The primary department must be one of your intents' departments. Use Nursing if 
       return { ...local, source: 'ai_fallback', reasoning: local.reasoning + ' AI unavailable; deterministic fallback used.', safety_flags: [...local.safety_flags, error.code || 'provider_unavailable'] };
     }
   }
-  return { ROUTES, INTENT_KINDS, INTENT_DEPARTMENTS, LANGUAGE_NAMES, READBACK, classifyLocal, classifyRequest, validateAndGuard, isValidResponse, RESPONSE_SCHEMA, detectLanguage, readback, patientMessage };
+  function nursingReview(text,options={},candidate=null,reason='Routing disagreement; nursing review required.') {
+    const local=classifyLocal(text,options);if(local.source==='safety_rule')return local;
+    const result=failSafe(text,options.language,reason,'ai_fallback');
+    const services=candidate?[...(candidate.is_clinical?[]:[{department:candidate.department,summary:candidate.summary,intents:candidate.intents?.filter(i=>i.department===candidate.department)||[]}]),...(candidate.additional_requests||[])]:[];
+    return attachTasks(result,services.filter(task=>Object.hasOwn(ROUTES,task.department)&&ROUTES[task.department].tier!=='clinical'&&task.department!=='Bedside Care'));
+  }
+  return { ROUTES, INTENT_KINDS, INTENT_DEPARTMENTS, LANGUAGE_NAMES, READBACK, classifyLocal, classifyRequest, validateAndGuard, isValidResponse, RESPONSE_SCHEMA, detectLanguage, readback, patientMessage, nursingReview };
 });

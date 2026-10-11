@@ -66,3 +66,34 @@ test('voice feedback observes only final transcripts from active recognition',()
 test('regional English settings reach speech recognition and retain English dialogue',()=>{
  for(const language of ['en-US','en-IN','en-GB','en-AU']){const x=setup({language});try{x.listener.start();assert.equal(x.instances[0].lang,language);x.hear('Hello Kalinga, I need water');assert.equal(x.prompts.at(-1).prompt,'confirm');assert.equal(x.sent.length,0);}finally{x.listener.dispose();}}
 });
+test('response cue waits for prompt playback and actual microphone start, once per turn',()=>{
+ const ready=[];const x=setup({onReady:turn=>ready.push(turn.phase)});
+ try{
+  x.listener.start();assert.deepEqual(ready,[],'wake monitoring is silent');
+  x.hear('Hey Kalinga');assert.deepEqual(ready,[],'no cue during ready prompt');
+  x.resume();assert.deepEqual(ready,['capture']);
+  x.instances.at(-1).onstart();assert.deepEqual(ready,['capture'],'duplicate starts do not replay');
+  x.hear('I am in pain');assert.deepEqual(ready,['capture']);x.resume();
+  assert.deepEqual(ready,['capture','pain']);x.hear('eight');x.resume();
+  assert.deepEqual(ready,['capture','pain','confirm']);assert.equal(x.sent.length,0);
+ }finally{x.listener.dispose();}
+});
+test('cue is withheld while blocked by a call and discarded on hide or stop',()=>{
+ for(const action of ['hidden','stop']){
+  const ready=[];const x=setup({onReady:turn=>ready.push(turn.phase)});
+  try{x.listener.start();x.hear('Hey Kalinga, water');x.listener.suspend('video',true);x.resume();assert.deepEqual(ready,[]);
+   if(action==='hidden'){x.listener.suspend('hidden',true);x.listener.suspend('video',false);x.listener.suspend('hidden',false);}
+   else{x.listener.stop();x.listener.suspend('video',false);}
+   assert.deepEqual(ready,[]);assert.equal(x.sent.length,0);
+  }finally{x.listener.dispose();}
+ }
+});
+test('recognition restart and microphone denial do not produce response cues',async()=>{
+ const ready=[];const x=setup({onReady:turn=>ready.push(turn.phase),restartMs:1});
+ try{x.listener.start();x.hear('Hey Kalinga, water');x.resume();assert.equal(ready.length,1);
+  x.instances.at(-1).onend();await new Promise(resolve=>setTimeout(resolve,10));assert.equal(ready.length,1);
+ }finally{x.listener.dispose();}
+ const failedReady=[];class Denied{start(){this.onerror?.({error:'not-allowed'});}abort(){}}
+ const denied=setup({Recognition:Denied,onReady:()=>failedReady.push(true)});
+ try{denied.listener.start();assert.deepEqual(failedReady,[]);assert.equal(denied.states.at(-1).error,'permission');}finally{denied.listener.dispose();}
+});

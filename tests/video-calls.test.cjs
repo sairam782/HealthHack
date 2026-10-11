@@ -118,3 +118,31 @@ test('public hosting disables video without relay configuration and keeps TURN s
   const relay=createVideoCalls({store:{},publicDeployment:true,readVoice:()=>{},turnUrls:'turns:relay.example:443?transport=tcp',turnSecret:'server-only-secret'});
   assert.equal(relay.available,true);assert.equal(relay.network,'relay');
 });
+test('public direct demo requires an explicit flag and configured TURN takes precedence',()=>{
+ const {createVideoCalls}=require('../lib/video-calls.cjs');
+ const options={store:{},publicDeployment:true,readVoice:()=>{},turnUrls:'',turnSecret:''};
+ for(const value of [false,'false','1','']){const disabled=createVideoCalls({...options,demoVideo:value});assert.equal(disabled.available,false);assert.equal(disabled.network,'disabled');}
+ for(const value of [true,'true']){const demo=createVideoCalls({...options,demoVideo:value});assert.equal(demo.available,true);assert.equal(demo.network,'demo-direct');}
+ const relay=createVideoCalls({...options,demoVideo:true,turnUrls:'turns:relay.example:443?transport=tcp',turnSecret:'private-secret'});assert.equal(relay.network,'relay');assert.equal(relay.available,true);
+});
+test('hosted direct demo exchanges STUN configuration while retaining acknowledgement, consent and participant privacy',async()=>{
+ const store=createStore({filename:':memory:'});const demo=createApplication({store,databaseUrl:'postgres://test-config-only',demoPassword:'test-password',publicDeployment:true,aiProvider:'rules',apiKey:'',elevenKey:'',turnUrls:'',turnSecret:'',demoVideo:true});
+ const server=http.createServer(demo.handler);await demo.initialize();await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base='http://127.0.0.1:'+server.address().port;const sessions={};
+ const callApi=async(path,role,method='GET',body)=>{const response=await fetch(base+path,{method,headers:{'Content-Type':'application/json',...(sessions[role]?{Cookie:sessions[role]}:{})},...(body?{body:JSON.stringify(body)}:{})});return {response,data:await response.json()};};
+ try{
+  const config=await callApi('/api/config');assert.equal(config.data.videoConfigured,true);assert.equal(config.data.videoNetwork,'demo-direct');
+  for(const role of ['patient','patient2','nurse','dietary']){const login=await callApi('/api/login',null,'POST',{email:role+'@kaalinga.demo',password:'test-password'});assert.equal(login.response.status,200);sessions[role]=login.response.headers.get('set-cookie').split(';')[0];}
+  const care=(await callApi('/api/requests','patient','POST',{text:'I need medication help.',requestKey:randomUUID()})).data.ticket;
+  assert.equal((await callApi('/api/calls','nurse','POST',{ticketId:care.id})).response.status,409);
+  assert.equal((await callApi('/api/calls','patient','POST',{ticketId:care.id})).response.status,403);
+  assert.equal((await callApi('/api/calls','dietary','POST',{ticketId:care.id})).response.status,403);
+  await callApi('/api/tickets/'+care.id,'nurse','PATCH',{action:'acknowledge'});
+  const created=await callApi('/api/calls','nurse','POST',{ticketId:care.id});assert.equal(created.response.status,201);const call=created.data.call;assert.equal(call.network,'demo-direct');
+  assert.equal((await callApi('/api/calls/'+call.id+'/signals','nurse','POST',{kind:'offer',payload:{type:'offer',sdp:'v=0\r\n'}})).response.status,409);
+  assert.equal((await callApi('/api/calls/'+call.id+'/signals','patient2')).response.status,404);
+  assert.equal((await callApi('/api/calls/'+call.id+'/action','patient','POST',{action:'accept'})).data.call.status,'ACCEPTED');
+  const signals=(await callApi('/api/calls/'+call.id+'/signals','patient')).data;assert.equal(signals.relayOnly,false);assert.deepEqual(signals.iceServers,[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']}]);assert.ok(!signals.iceServers[0].credential);
+  assert.equal((await callApi('/api/calls/'+call.id+'/action','nurse','POST',{action:'end'})).data.call.status,'ENDED');
+  assert.equal((await callApi('/api/tickets','patient')).data.tickets.find(t=>t.id===care.id).status,'ACKNOWLEDGED');
+ }finally{await new Promise(resolve=>server.close(resolve));await demo.close();}
+});

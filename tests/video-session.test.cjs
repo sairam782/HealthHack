@@ -1,12 +1,12 @@
 'use strict';
 const {test}=require('node:test');const assert=require('node:assert/strict');const {createSession}=require('../video-call.js');
-function setup({patient=false,pendingMedia=false,denied=false,slowEnd=false}={}){
+function setup({patient=false,pendingMedia=false,denied=false,slowEnd=false,iceServers=[],relayOnly=false}={}){
   const tracks=[{id:'video',kind:'video',enabled:true,readyState:'live',stop(){this.readyState='ended';}},{id:'audio',kind:'audio',enabled:true,readyState:'live',stop(){this.readyState='ended';}}];
   const stream={getTracks:()=>tracks,getAudioTracks:()=>tracks.filter(track=>track.kind==='audio'),getVideoTracks:()=>tracks.filter(track=>track.kind==='video')};
   let current={id:'call-test',patient_id:'patient',nurse_id:'nurse',status:'RINGING'},captures=0,resolveMedia,resolveEnd;
   const requests=[],peers=[],states=[];let remoteSignals=[];
   class Peer{
-    constructor(){peers.push(this);this.remoteDescription=null;this.added=[];}
+    constructor(configuration){peers.push(this);this.configuration=configuration;this.remoteDescription=null;this.added=[];}
     addTrack(){}close(){this.closed=true;}
     async createOffer(){return {type:'offer',sdp:'v=0\r\n'};}async createAnswer(){return {type:'answer',sdp:'v=0\r\n'};}
     async setLocalDescription(value){this.localDescription=value;}async setRemoteDescription(value){this.remoteDescription=value;}
@@ -21,7 +21,7 @@ function setup({patient=false,pendingMedia=false,denied=false,slowEnd=false}={})
       current={...current,status:action==='accept'?'ACCEPTED':action==='connected'?'CONNECTED':action==='failed'?'FAILED':'ENDED'};
       if(slowEnd&&action==='end')await new Promise(resolve=>{resolveEnd=resolve;});
     }
-    return {call:current,signals:remoteSignals,iceServers:[],relayOnly:false};
+    return {call:current,signals:remoteSignals,iceServers,relayOnly};
   }});
   return {session,tracks,stream,requests,peers,states,captures:()=>captures,resolveMedia:()=>resolveMedia(stream),resolveEnd:()=>resolveEnd(),accepted:()=>{current={...current,status:'ACCEPTED'};},signals:value=>{remoteSignals=value;}};
 }
@@ -58,4 +58,7 @@ test('ending stops capture immediately while the server action is still pending'
     assert.equal(x.peers[0].closed,true);assert.equal(x.states.at(-1).status,'ended');
     x.resolveEnd();await ending;
   }finally{x.session.dispose();}
+});
+test('direct demo and TURN configuration use their respective ICE policies after acceptance',async()=>{
+ for(const relayOnly of [false,true]){const iceServers=[{urls:relayOnly?'turns:relay.example:443':'stun:stun.l.google.com:19302'}];const x=setup({patient:true,iceServers,relayOnly});try{await x.session.start();assert.equal(x.peers[0].configuration.iceTransportPolicy,relayOnly?'relay':'all');assert.deepEqual(x.peers[0].configuration.iceServers,iceServers);}finally{x.session.dispose();}}
 });

@@ -6,7 +6,7 @@ The hosted hackathon demo is live at **https://kalinga-three.vercel.app**, in th
 
 Hosted smoke checks verified 38 seeded accounts, independent patient/staff sessions, secure cookies, live Bedrock classification, real ElevenLabs output, staff alerts, cross-account permissions, retry deduplication, multi-team routing, parallel urgent Nursing/Medical Team escalation, and an 8/10 pain report. Synthetic smoke requests were acknowledged and completed by their respective test staff accounts. The nonsecret report is `artifacts/vercel-smoke.json`.
 
-The current voice input provider is browser speech recognition. Video is disabled on the hosted app until TURN is configured. The short-term Bedrock key must be renewed before expiration; provider failures retain the app's labelled rules fallback. Local SQLite history is separate from the new managed database.
+The current voice input provider is browser speech recognition. Video now has explicit direct demo mode (`WEBRTC_DEMO_MODE=true`) for the iPad/phone test; use the same Wi-Fi initially. Reliable relayed video still needs TURN. The short-term Bedrock key must be renewed before expiration; provider failures retain the app's labelled rules fallback. Local SQLite history is separate from the new managed database.
 
 To reproduce the deployment in another project:
 
@@ -69,3 +69,7 @@ Configure HTTPS at the hosting layer because deployed session cookies are Secure
 Notifications are stored per user in Postgres and delivered through authenticated polling while the app is open. Optional browser notifications do not create closed-browser web push. Email/SMS and device subscriptions need a delivery service and worker.
 
 The shared transaction lock protects concurrent retry deduplication and schema creation across function instances. It serializes writes and suits a small demo. The app retrieves complete scoped ticket history, seeds shared-password demo identities, and has no ward/tenant administration or live hospital staffing/credential feed. Shift states and task competencies use demonstration policy. Extend those parts before a larger pilot.
+
+## Optional second routing expert
+
+The current Vercel demo enables `AI_ROUTING_MODE=ensemble`, with Bedrock Nova 2 Lite and Groq GPT-OSS 120B configured as independent guarded experts. Primary tickets retain model-call review records; known clinical triggers bypass both. `AI_ROUTING_MODE=single` returns to the previous one-model path. A Groq rate-limit failure is reported and triggers a per-instance cooldown. See [expert routing](expert-routing.md) for review policy, validation evidence and the optional teammate SetFit endpoint contract. No SetFit prediction endpoint is configured.

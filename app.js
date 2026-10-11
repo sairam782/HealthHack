@@ -183,7 +183,7 @@ function PainReport({pain,language,clinical=false}){
   const code=clinical?'en':Object.entries(KaalingaRouting.LANGUAGE_NAMES).find(([,name])=>name===language)?.[0]||'en';const copy=KaalingaPain.COPY[code]||KaalingaPain.COPY.en;
   return h('div',{className:'pain-report '+(pain.band||'unscored')},h('strong',null,copy.reported+' · '+(pain.score===null?copy.unscored:pain.score+'/10')),pain.location&&h('span',null,pain.location),pain.worsening&&h('span',null,copy.changed),pain.conflicting_score&&h('small',null,copy.conflict),clinical&&h('small',null,'Nursing assessment required'));
 }
-function PatientTicket({ticket, linkedTickets=[], copy, voiceConfigured, onReadback}) {
+function PatientTicket({ticket, linkedTickets=[], copy, voiceConfigured, onReadback, onPainUpdate}) {
   const tier = TIERS[ticket.tier];
   return h('article', {className:'patient-ticket',style:{borderLeft:'4px solid '+tier.color}},
     h('div', {style:{display:'flex',justifyContent:'space-between',gap:10}},
@@ -192,6 +192,7 @@ function PatientTicket({ticket, linkedTickets=[], copy, voiceConfigured, onReadb
     ),
     h('p', {dir:'auto'}, ticket.original_text),
     ticket.pain&&h(PainReport,{pain:ticket.pain,language:ticket.detected_language}),
+    ticket.pain&&ticket.department==='Nursing'&&ticket.priority!==1&&ticket.status!=='RESOLVED'&&onPainUpdate&&h('button',{className:'btn btn-sm',onClick:()=>onPainUpdate(ticket)},'Update pain report'),
     h('p', {dir:'auto',style:{color:'var(--fg2)'}}, ticket.status_message || ticket.patient_summary),
     linkedTickets.length>0&&h('div',{className:'linked-patient-tasks','aria-label':'Linked team requests'},[...linkedTickets].sort((a,b)=>(a.status==='RESOLVED')-(b.status==='RESOLVED')||a.priority-b.priority).map(task=>h('div',{key:task.id,className:'linked-patient-task'},
       h('div',null,h('strong',null,task.department),h('span',{className:'status-step'+(task.status==='RESOLVED'?' done':'')},task.status==='RESOLVED'?copy.resolved:task.status==='ACKNOWLEDGED'?copy.acknowledged:copy.received)),
@@ -237,7 +238,8 @@ function StaffTicket({ticket, now, onAction, pending, onReferral, referralTarget
       h('details',{className:'routing-details'},h('summary',null,'Request and routing details'),
         !ticket.is_clinical && h('p',{className:'tk-msg',dir:'auto'},ticket.original_text),
         h('p',{className:'ticket-meta'},(SOURCE_LABELS[ticket.source]||ticket.source)+' · '+Math.round(ticket.classification_ms)+' ms'+(ticket.confidence===null?'':' · AI self-report '+Math.round(ticket.confidence*100)+'%')),
-        h('p',{className:'ticket-meta'},'Checks: '+(ticket.routing_checks?.join(', ')||'Legacy request'))),
+        h('p',{className:'ticket-meta'},'Checks: '+(ticket.routing_checks?.join(', ')||'Legacy request')),
+        ticket.model_reviews?.length>0&&h('div',{'aria-label':'Model review'},h('strong',null,'Model review'),ticket.model_reviews.map((review,index)=>h('p',{key:index,className:'ticket-meta'},review.provider+' · '+review.model+' · '+review.status+' · '+review.latency_ms+' ms'+(review.teams?' · '+review.teams.join(', '):''))))),
       ticket.referrals?.length>0 && h('p',{className:'ticket-meta'},'Consultations: '+ticket.referrals.map(item=>item.department+' · '+item.status).join(' / ')),
       canRefer && ticket.status!=='RESOLVED' && h('details',{className:'referral-form'},
         h('summary',null,'Arrange a consultation'),
@@ -278,11 +280,13 @@ function VideoCallPanel({call,user,language,onChange,onDismiss,onMedia,onBeforeJ
   return h('section',{className:'video-call-panel','aria-label':copy.title},
     h('div',{className:'call-heading'},h('div',null,h('span',{className:'eyebrow'},call.room),h('h2',null,copy.title)),h('span',{className:'call-state'},terminal?copy.ended:state.status==='connected'?copy.connected:state.status==='connecting'?copy.connecting:call.status==='RINGING'?(patient?copy.invite:copy.waiting):copy.accepted)),
     h('p',{className:'call-privacy'},copy.privacy),
+    call.network==='demo-direct'&&h('p',{className:'call-privacy'},language.startsWith('es')?'Videollamada de demostración: use la misma red Wi-Fi en ambos dispositivos.':language.startsWith('hi')?'डेमो वीडियो कॉल: दोनों डिवाइस एक ही वाई-फ़ाई पर रखें।':language.startsWith('fr')?'Appel vidéo de démonstration : connectez les deux appareils au même Wi-Fi.':'Demo video call: keep both devices on the same Wi-Fi. Some networks may block the connection.'),
     (local||remote)&&h('div',{className:'call-videos'},
       h('div',{className:'call-tile'},remote&&h('video',{ref:remoteVideo,autoPlay:true,playsInline:true,controls:true,'aria-label':patient?copy.other:copy.patient}),!remote&&h('span',{className:'call-placeholder'},copy.remote),h('span',{className:'call-caption'},patient?copy.other:copy.patient)),
       h('div',{className:'call-tile local'},h('video',{ref:localVideo,autoPlay:true,playsInline:true,muted:true,'aria-label':copy.you}),h('span',{className:'call-caption'},copy.you))
     ),
     state.errorKey&&h('p',{className:'error-box',role:'alert'},copy[state.errorKey]),
+    state.errorKey==='connection'&&call.network==='demo-direct'&&h('p',{className:'call-privacy'},language.startsWith('es')?'Pruebe en otra red Wi-Fi. Algunas redes requieren un servicio de retransmisión.':language.startsWith('hi')?'दूसरे वाई-फ़ाई पर दोबारा प्रयास करें। कुछ नेटवर्क के लिए रिले सेवा की आवश्यकता होती है।':language.startsWith('fr')?'Réessayez sur un autre Wi-Fi. Certains réseaux nécessitent un service de relais.':'End and reoffer the call with both devices on the same Wi-Fi, or try another Wi-Fi network. If it still fails, this network needs a relay service.'),
     state.status==='preparing'&&h('p',{role:'status'},copy.preparing),
     h('div',{className:'call-controls'},
       !terminal&&!local&&h(React.Fragment,null,
@@ -299,10 +303,16 @@ function VideoCallPanel({call,user,language,onChange,onDismiss,onMedia,onBeforeJ
 }
 
 const WAKE_COPY={
-  en:{title:'Hey Kalinga',enable:'Enable hands-free',disable:'Stop hands-free',hint:'Say “Hey Kalinga, I need water.” Then say “Send request” or “Cancel”.',awsPrivacy:'Audio is streamed to Amazon Transcribe while listening. Stop hands-free to stop the microphone.',awsReview:'Voice input uses your selected language. Review the transcript before sending.',privacy:'Microphone stays active while this page is visible. Browser recognition may send audio to its speech service. This is an experimental browser feature.',wake:'Listening for “Hey Kalinga”…',capture:'Listening — tell me what you need.',confirm:'Say “Send request” to confirm, or “Cancel”.',sending:'Sending your request…',paused:'Listening paused during audio, a call, or another task.',starting:'Starting microphone…',off:'Hands-free is off.',error:'Hands-free stopped. Check microphone permission or use Voice input.',unavailable:'Hands-free needs supported browser speech recognition and configured voice replies.',play:'Play voice prompt'},
-  es:{title:'Hey Kalinga',enable:'Activar manos libres',disable:'Detener manos libres',hint:'Diga “Hey Kalinga” y su solicitud. Después diga “Enviar solicitud” o “Cancelar”.',awsPrivacy:'El audio se envía a Amazon Transcribe mientras escucha. Detenga manos libres para apagar el micrófono.',awsReview:'La voz usa el idioma seleccionado. Revise la transcripción antes de enviar.',privacy:'El micrófono permanece activo mientras esta página está visible. El navegador puede enviar audio a su servicio de voz. Función experimental.',wake:'Esperando “Hey Kalinga”…',capture:'Le escucho. Dígame qué necesita.',confirm:'Diga “Enviar solicitud” o “Cancelar”.',sending:'Enviando su solicitud…',paused:'Escucha pausada durante audio, una llamada u otra tarea.',starting:'Iniciando micrófono…',off:'Manos libres desactivado.',error:'La escucha se detuvo. Revise el permiso del micrófono.',unavailable:'Requiere reconocimiento del navegador y respuestas de voz configuradas.',play:'Reproducir indicación'},
-  hi:{title:'हे कालिंगा',enable:'हैंड्स-फ़्री चालू करें',disable:'हैंड्स-फ़्री बंद करें',hint:'“हे कालिंगा, मुझे पानी चाहिए” कहें। फिर “अनुरोध भेजें” या “रद्द करें” कहें।',awsPrivacy:'सुनते समय आवाज़ Amazon Transcribe को भेजी जाती है। माइक्रोफ़ोन रोकने के लिए हैंड्स-फ़्री बंद करें।',awsReview:'आवाज़ के लिए चुनी गई भाषा उपयोग होती है। भेजने से पहले लिखित अनुरोध जाँचें।',privacy:'यह पेज दिखाई देने पर माइक्रोफ़ोन चालू रहता है। ब्राउज़र आवाज़ अपनी पहचान सेवा को भेज सकता है। यह प्रयोगात्मक सुविधा है।',wake:'“हे कालिंगा” सुनने की प्रतीक्षा…',capture:'मैं सुन रही हूँ। बताइए आपको क्या चाहिए।',confirm:'“अनुरोध भेजें” या “रद्द करें” कहें।',sending:'आपका अनुरोध भेजा जा रहा है…',paused:'आवाज़, कॉल या अन्य काम के दौरान सुनना रुका है।',starting:'माइक्रोफ़ोन शुरू हो रहा है…',off:'हैंड्स-फ़्री बंद है।',error:'सुनना रुक गया। माइक्रोफ़ोन की अनुमति जाँचें।',unavailable:'ब्राउज़र में आवाज़ पहचान और कॉन्फ़िगर किए गए जवाब ज़रूरी हैं।',play:'आवाज़ का निर्देश सुनें'},
-  fr:{title:'Hey Kalinga',enable:'Activer mains libres',disable:'Arrêter mains libres',hint:'Dites « Hey Kalinga » puis votre demande. Ensuite, dites « Envoyer la demande » ou « Annuler ».',awsPrivacy:'L’audio est transmis à Amazon Transcribe pendant l’écoute. Arrêtez mains libres pour couper le microphone.',awsReview:'La voix utilise la langue sélectionnée. Vérifiez la transcription avant l’envoi.',privacy:'Le microphone reste actif lorsque cette page est visible. Le navigateur peut envoyer l’audio à son service vocal. Fonction expérimentale.',wake:'En attente de « Hey Kalinga »…',capture:'Je vous écoute. Dites-moi ce dont vous avez besoin.',confirm:'Dites « Envoyer la demande » ou « Annuler ».',sending:'Envoi de votre demande…',paused:'Écoute suspendue pendant un audio, un appel ou une autre tâche.',starting:'Démarrage du microphone…',off:'Mains libres désactivé.',error:'Écoute arrêtée. Vérifiez l’autorisation du microphone.',unavailable:'Nécessite la reconnaissance du navigateur et des réponses vocales configurées.',play:'Lire l’instruction vocale'}
+  en:{title:'Hey Kalinga',enable:'Enable hands-free',disable:'Stop hands-free',hint:'Say “Hey Kalinga, I need water.” Then say “Send request” or “Cancel”. Pain requests alert Nursing immediately; the pain score comes afterward.',awsPrivacy:'Audio is streamed to Amazon Transcribe while listening. Stop hands-free to stop the microphone.',awsReview:'Voice input uses your selected language. Review the transcript before sending.',privacy:'Microphone stays active while this page is visible. Browser recognition may send audio to its speech service. This is an experimental browser feature.',wake:'Listening for “Hey Kalinga”…',capture:'Listening — tell me what you need.',confirm:'Say “Send request” to confirm, or “Cancel”.',sending:'Sending your request…',paused:'Listening paused during audio, a call, or another task.',starting:'Starting microphone…',off:'Hands-free is off.',error:'Hands-free stopped. Check microphone permission or use Voice input.',unavailable:'Hands-free needs supported browser speech recognition and configured voice replies.',play:'Play voice prompt'},
+  es:{title:'Hey Kalinga',enable:'Activar manos libres',disable:'Detener manos libres',hint:'Diga “Hey Kalinga” y su solicitud. Después diga “Enviar solicitud” o “Cancelar”. El dolor se envía a enfermería antes de pedir una puntuación.',awsPrivacy:'El audio se envía a Amazon Transcribe mientras escucha. Detenga manos libres para apagar el micrófono.',awsReview:'La voz usa el idioma seleccionado. Revise la transcripción antes de enviar.',privacy:'El micrófono permanece activo mientras esta página está visible. El navegador puede enviar audio a su servicio de voz. Función experimental.',wake:'Esperando “Hey Kalinga”…',capture:'Le escucho. Dígame qué necesita.',confirm:'Diga “Enviar solicitud” o “Cancelar”.',sending:'Enviando su solicitud…',paused:'Escucha pausada durante audio, una llamada u otra tarea.',starting:'Iniciando micrófono…',off:'Manos libres desactivado.',error:'La escucha se detuvo. Revise el permiso del micrófono.',unavailable:'Requiere reconocimiento del navegador y respuestas de voz configuradas.',play:'Reproducir indicación'},
+  hi:{title:'हे कालिंगा',enable:'हैंड्स-फ़्री चालू करें',disable:'हैंड्स-फ़्री बंद करें',hint:'“हे कालिंगा, मुझे पानी चाहिए” कहें। फिर “अनुरोध भेजें” या “रद्द करें” कहें। दर्द का अनुरोध अंक पूछने से पहले नर्सिंग को भेजा जाता है।',awsPrivacy:'सुनते समय आवाज़ Amazon Transcribe को भेजी जाती है। माइक्रोफ़ोन रोकने के लिए हैंड्स-फ़्री बंद करें।',awsReview:'आवाज़ के लिए चुनी गई भाषा उपयोग होती है। भेजने से पहले लिखित अनुरोध जाँचें।',privacy:'यह पेज दिखाई देने पर माइक्रोफ़ोन चालू रहता है। ब्राउज़र आवाज़ अपनी पहचान सेवा को भेज सकता है। यह प्रयोगात्मक सुविधा है।',wake:'“हे कालिंगा” सुनने की प्रतीक्षा…',capture:'मैं सुन रही हूँ। बताइए आपको क्या चाहिए।',confirm:'“अनुरोध भेजें” या “रद्द करें” कहें।',sending:'आपका अनुरोध भेजा जा रहा है…',paused:'आवाज़, कॉल या अन्य काम के दौरान सुनना रुका है।',starting:'माइक्रोफ़ोन शुरू हो रहा है…',off:'हैंड्स-फ़्री बंद है।',error:'सुनना रुक गया। माइक्रोफ़ोन की अनुमति जाँचें।',unavailable:'ब्राउज़र में आवाज़ पहचान और कॉन्फ़िगर किए गए जवाब ज़रूरी हैं।',play:'आवाज़ का निर्देश सुनें'},
+  fr:{title:'Hey Kalinga',enable:'Activer mains libres',disable:'Arrêter mains libres',hint:'Dites « Hey Kalinga » puis votre demande. Ensuite, dites « Envoyer la demande » ou « Annuler ». La douleur est signalée à l’équipe infirmière avant de demander un score.',awsPrivacy:'L’audio est transmis à Amazon Transcribe pendant l’écoute. Arrêtez mains libres pour couper le microphone.',awsReview:'La voix utilise la langue sélectionnée. Vérifiez la transcription avant l’envoi.',privacy:'Le microphone reste actif lorsque cette page est visible. Le navigateur peut envoyer l’audio à son service vocal. Fonction expérimentale.',wake:'En attente de « Hey Kalinga »…',capture:'Je vous écoute. Dites-moi ce dont vous avez besoin.',confirm:'Dites « Envoyer la demande » ou « Annuler ».',sending:'Envoi de votre demande…',paused:'Écoute suspendue pendant un audio, un appel ou une autre tâche.',starting:'Démarrage du microphone…',off:'Mains libres désactivé.',error:'Écoute arrêtée. Vérifiez l’autorisation du microphone.',unavailable:'Nécessite la reconnaissance du navigateur et des réponses vocales configurées.',play:'Lire l’instruction vocale'}
+};
+const TURN_COPY={
+  en:{ready:'Your turn — speak now',sound:'Sound when it is my turn to speak'},
+  es:{ready:'Su turno — hable ahora',sound:'Sonido cuando sea mi turno de hablar'},
+  hi:{ready:'अब आपकी बारी — बोलिए',sound:'मेरे बोलने की बारी पर ध्वनि'},
+  fr:{ready:'À vous — parlez maintenant',sound:'Son quand c’est à moi de parler'}
 };
 function App() {
   const [config,setConfig] = useState(null);
@@ -328,8 +338,12 @@ function App() {
   const [requestError,setRequestError] = useState('');
   const [retryRequest,setRetryRequest] = useState(null);
   const [recording,setRecording] = useState(false);
+  const [recordingReady,setRecordingReady]=useState(false);
   const [voiceDraft,setVoiceDraft] = useState(false);
   const [assistantTurn,setAssistantTurn]=useState(null);
+  const [painFollowUp,setPainFollowUp]=useState(null),[painUpdating,setPainUpdating]=useState(false),[painUpdateError,setPainUpdateError]=useState('');
+  const painTarget=useRef(null);painTarget.current=painFollowUp;
+  const painUpdateBusy=useRef(false);
   const [voiceReplies,setVoiceReplies] = useState(true);
   const [voicePlayback,setVoicePlayback] = useState({status:'idle',ticket:null});
   const [patientUpdate,setPatientUpdate] = useState(null);
@@ -347,8 +361,11 @@ function App() {
   const recognitionRef = useRef(null);
   const wakeListener = useRef(null);
   const [wakeState,setWakeState]=useState({enabled:false,phase:'wake',status:'off',error:null});
+  const [turnSound,setTurnSound]=useState(true);
+  const turnSoundEnabled=useRef(true);turnSoundEnabled.current=turnSound;
+  const turnCue=useRef(null);if(!turnCue.current)turnCue.current=KaalingaVoice.createTurnCue();
   const voicePlayer = useRef(null);
-  if (!voicePlayer.current) voicePlayer.current = KaalingaVoice.createPlayer({onState:state=>{setVoicePlayback(state);wakeListener.current?.suspend('speech',state.status!=='idle');}});
+  if (!voicePlayer.current) voicePlayer.current = KaalingaVoice.createPlayer({onState:state=>{setVoicePlayback(state);if(state.status!=='idle')turnCue.current.stop();wakeListener.current?.suspend('speech',state.status!=='idle');}});
   const voiceUpdates = useRef(KaalingaVoice.createUpdateTracker());
   const deferredVoice = useRef([]);
   const voiceSettings = useRef(null);
@@ -362,11 +379,12 @@ function App() {
   const clockOffset = useRef(0);
   const copy = COPY[language.split('-')[0]] || COPY.en;
   const painCopy=KaalingaPain.COPY[language.split('-')[0]]||KaalingaPain.COPY.en;
-  const painVisible=(painOpen||KaalingaPain.hasPain(text))&&KaalingaRouting.classifyLocal(text,{language}).priority!==1;
-  const displayedPainScore=painScore??KaalingaPain.extractScore(text);
+  const displayedPainScore=painScore;
   const voiceCopy = VOICE_COPY[language.split('-')[0]] || VOICE_COPY.en;
   const isPatient = user?.role==='patient';
   const wakeCopy=WAKE_COPY[language.split('-')[0]]||WAKE_COPY.en;
+  const turnCopy=TURN_COPY[language.split('-')[0]]||TURN_COPY.en;
+  const patientTurn=wakeState.enabled&&wakeState.status==='listening'&&['capture','confirm','pain','pain_sent'].includes(wakeState.phase);
   const speechLanguage=config?.voiceInputProvider==='browser'&&language.startsWith('en')?englishSpeech:language;
   const wakeSupported=Boolean(KaalingaTranscribe.getRecognition(config||{})&&WAKE_COPY[language.split('-')[0]]&&config?.voiceConfigured&&voiceReplies);
 
@@ -384,20 +402,24 @@ function App() {
     } catch(err) { setBootError(err.message); }
     finally { setBooting(false); }
   }
-  useEffect(()=>{ boot(); return ()=>{ clearTimeout(toastTimer.current); wakeListener.current?.dispose(); recognitionRef.current?.abort(); voicePlayer.current.stop(); }; },[]);
+  useEffect(()=>{ boot(); return ()=>{ clearTimeout(toastTimer.current); wakeListener.current?.dispose(); recognitionRef.current?.abort(); voicePlayer.current.stop();turnCue.current.dispose(); }; },[]);
   useEffect(()=>{
     stopWake();
     setLastHeard(null);setEnglishSpeech('en-US');
-    setVoiceDraft(false); setAssistantTurn(null); voicePlayer.current.stop(); voiceUpdates.current.reset(); deferredVoice.current=[]; setPatientUpdate(null);
+    setVoiceDraft(false); setAssistantTurn(null); setPainFollowUp(null);setPainUpdateError(''); voicePlayer.current.stop(); voiceUpdates.current.reset(); deferredVoice.current=[]; setPatientUpdate(null);
     setActiveCall(null);setVideoOpen(false);seenCalls.current.clear();
-    const previous=recognitionRef.current; recognitionRef.current=null; previous?.abort(); setRecording(false);
+    const previous=recognitionRef.current; recognitionRef.current=null; previous?.abort(); setRecording(false);setRecordingReady(false);
   },[user?.id]);
+  useEffect(()=>{
+    if(painFollowUp?.id)document.getElementById('pain-follow-up')?.scrollIntoView({block:'start',behavior:'smooth'});
+  },[painFollowUp?.id]);
   useEffect(()=>{
     if (recording || !voiceSettings.current.enabled) return;
     const waiting=deferredVoice.current; deferredVoice.current=[];
     for(const ticket of waiting) voicePlayer.current.enqueue(ticket);
   },[recording]);
   function stopWake(){
+    turnCue.current.stop();
     setAssistantTurn(null);
     wakeListener.current?.dispose();wakeListener.current=null;
     setWakeState({enabled:false,phase:'wake',status:'off',error:null});
@@ -405,15 +427,20 @@ function App() {
   function toggleWake(){
     if(wakeState.enabled){stopWake();if(voicePlayback.ticket?.assistant_prompt)voicePlayer.current.stop();return;}
     stopWake();voicePlayer.current.stop();
+    if(turnSoundEnabled.current)turnCue.current.unlock();
     const speaker=activeUser.current;
-    const controller=KaalingaWake.createListener({Recognition:KaalingaTranscribe.getRecognition(config),language:speechLanguage,onState:state=>{if(activeUser.current===speaker)setWakeState(state);},
+    const controller=KaalingaWake.createListener({initialPainTicket:painTarget.current,Recognition:KaalingaTranscribe.getRecognition(config),language:speechLanguage,onState:state=>{if(activeUser.current===speaker)setWakeState(state);},
       onHeard:heard=>{if(activeUser.current===speaker)setLastHeard(heard);},
+      onReady:()=>{if(activeUser.current===speaker&&turnSoundEnabled.current&&!document.hidden)turnCue.current.play();},
       onDraft:draft=>{if(activeUser.current===speaker){setText(draft);setPainScore(null);setVoiceDraft(Boolean(draft));}},
-      onPrompt:(prompt,draft)=>{
+      onPrompt:(prompt,draft,ticket)=>{
         if(activeUser.current!==speaker)return;
-        showAssistantPrompt(prompt,draft);
+        showAssistantPrompt(prompt,draft,ticket);
         if(voiceSettings.current.enabled)controller.suspend('speech',true);
       },
+      onPainAlert:draft=>activeUser.current===speaker?send(draft,false,null,{},true):Promise.resolve(false),
+      onPainUpdate:(ticket,update)=>activeUser.current===speaker?updatePain(update,ticket,true):Promise.resolve(false),
+      onPainSkip:ticket=>{if(activeUser.current===speaker)skipPain(ticket,true);},
       onSend:draft=>activeUser.current===speaker?send(draft):Promise.resolve(false)
     });
     wakeListener.current=controller;
@@ -421,7 +448,7 @@ function App() {
     controller.start();
   }
   useEffect(()=>{
-    const changed=()=>wakeListener.current?.suspend('hidden',document.hidden);
+    const changed=()=>{if(document.hidden)turnCue.current.stop();wakeListener.current?.suspend('hidden',document.hidden);};
     document.addEventListener('visibilitychange',changed);
     return()=>document.removeEventListener('visibilitychange',changed);
   },[]);
@@ -429,6 +456,7 @@ function App() {
     wakeListener.current?.suspend('busy',processing||emergencyProcessing||demoRunning);
     wakeListener.current?.suspend('video',videoOpen);
     wakeListener.current?.suspend('manual',recording);
+    if(processing||emergencyProcessing||demoRunning||videoOpen)turnCue.current.stop();
   },[processing,emergencyProcessing,demoRunning,videoOpen,recording]);
   function patientFeedback(ticket) {
     setPatientUpdate(ticket);
@@ -454,6 +482,7 @@ function App() {
         if (cancelled || activeUser.current!==id) return;
         if (result.user.id!==id) { activeUser.current=result.user.id; setUser(result.user); setTickets([]); setNotifications([]); return; }
         setUser(result.user); setTickets(result.tickets); setNotifications(result.notifications); setConnected(true);
+        setPainFollowUp(current=>{if(!current)return null;const latest=result.tickets.find(ticket=>ticket.id===current.id);if(!latest||(latest.pain?.revision||0)<(current.pain?.revision||0))return current;return !latest.resolved_at&&latest.priority!==1?latest:null;});
         if(result.user.role==='patient') {
           for(const ticket of voiceUpdates.current.observe(result.tickets,first)) patientFeedback(ticket);
         }
@@ -518,14 +547,14 @@ function App() {
     refresh().catch(()=>{});
     return data.ticket;
   }
-  function showAssistantPrompt(prompt,draft='') {
+  function showAssistantPrompt(prompt,draft='',ticket=null) {
     if(!KaalingaAssistant.COPY[language.split('-')[0]])return;
-    const message=KaalingaAssistant.promptText({prompt,text:draft,language},draft?KaalingaRouting.classifyLocal(draft,{language}):null);
+    const message=KaalingaAssistant.promptText({prompt,text:draft,language},draft?KaalingaRouting.classifyLocal(draft,{language}):null,ticket);
     if(!message)return;
-    setAssistantTurn({prompt,draft,text:message});
-    if(config?.voiceConfigured&&voiceSettings.current.enabled)voicePlayer.current.enqueue({id:crypto.randomUUID(),status:'ASSISTANT',assistant_prompt:prompt,language,draft});
+    setAssistantTurn({prompt,draft,text:message,ticket});
+    if(config?.voiceConfigured&&voiceSettings.current.enabled)voicePlayer.current.enqueue({id:crypto.randomUUID(),status:'ASSISTANT',assistant_prompt:prompt,language,draft,pain_ticket_id:ticket?.id});
   }
-  async function send(input,urgent=false,retry=null,painOverride=null) {
+  async function send(input,urgent=false,retry=null,painOverride=null,deferPainPrompt=false) {
     if (!input.trim() || (urgent?urgentBusy.current:normalBusy.current)) return;
     if(urgent) { urgentBusy.current=true; setEmergencyProcessing(true); }
     else { normalBusy.current=true; setProcessing(true); }
@@ -545,7 +574,11 @@ function App() {
       setVoiceDraft(false);
       announce(ticket.status_message || ticket.patient_summary);
       patientFeedback(ticket);
-      return true;
+      if(ticket.pain&&ticket.pain.score===null&&ticket.priority!==1){
+        setPainFollowUp(ticket);setPainUpdateError('');
+        if(!deferPainPrompt)showAssistantPrompt('pain_notified','',ticket);
+      }
+      return ticket;
     } catch(err) {
       if(activeUser.current!==sender) return;
       setRequestError('Your request was not confirmed as delivered. Retry, or use the bedside call bell for help.');
@@ -556,17 +589,46 @@ function App() {
       else { normalBusy.current=false; setProcessing(false); }
     }
   }
+  function skipPain(ticket=painTarget.current,quiet=false){
+    if(!ticket)return;
+    setPainFollowUp(current=>current?.id===ticket.id?null:current);setPainUpdateError('');setPainScore(null);setPainLocation('');setPainWorsening(false);
+    if(voicePlayback.ticket?.assistant_prompt)voicePlayer.current.stop();
+    if(!quiet)showAssistantPrompt('pain_skipped','',ticket);
+  }
+  async function updatePain(update,ticket=painTarget.current,quiet=false){
+    if(!ticket||painUpdateBusy.current)return false;
+    const sender=activeUser.current; painUpdateBusy.current=true;setPainUpdating(true);setPainUpdateError('');
+    if(voicePlayback.ticket?.assistant_prompt)voicePlayer.current.stop();
+    try{
+      const data=await api('/api/tickets/'+ticket.id+'/pain',{method:'PATCH',body:JSON.stringify({...update,revision:ticket.pain.revision||0})});
+      if(activeUser.current!==sender||data.ticket.patient_id!==sender)return false;
+      const updated=data.ticket;
+      setPatientUpdate(updated);
+      setTickets(previous=>previous.map(item=>item.id===updated.id?updated:item));
+      setPainFollowUp(current=>current?.id===ticket.id?null:current);
+      setPainScore(null);setPainLocation('');setPainWorsening(false);
+      if(updated.priority===1){patientFeedback(updated);showAssistantPrompt('pain_escalated','',updated);}
+      else if(!quiet)showAssistantPrompt('pain_saved','',updated);
+      refresh().catch(()=>{});return updated;
+    }catch(error){
+      if(activeUser.current===sender){setPainUpdateError(error.status===409?error.message:'Your pain request is still with Nursing. The score update was not confirmed. Please retry.');refresh().catch(()=>{});}
+      return false;
+    }finally{painUpdateBusy.current=false;setPainUpdating(false);}
+  }
   function toggleRecording() {
-    const followUp=assistantTurn&&['pain_question','pain_retry'].includes(assistantTurn.prompt)?assistantTurn:null;
+    const followUp=painTarget.current?{ticket:painTarget.current}:assistantTurn&&['pain_question','pain_retry'].includes(assistantTurn.prompt)?assistantTurn:null;
     stopWake();
+    setRecordingReady(false);
     if(recording) { recognitionRef.current?.stop(); setRecording(false); return; }
     const Recognition=KaalingaTranscribe.getRecognition(config);
     if(!Recognition) { announce('Voice input is unavailable in this browser. You can type or use a quick request.'); return; }
     const recognition=new Recognition();
     const speaker=activeUser.current;
     voicePlayer.current.stop(); setVoiceDraft(false);
+    if(turnSoundEnabled.current)turnCue.current.unlock();
     recognition.lang=speechLanguage; recognition.continuous=false; recognition.interimResults=true;
     let finalTranscript='',recognitionFailed=false;
+    recognition.onstart=()=>{if(activeUser.current===speaker&&recognitionRef.current===recognition){setRecordingReady(true);if(!document.hidden&&turnSoundEnabled.current)turnCue.current.play();}};
     recognition.onresult=e=>{
       if(activeUser.current!==speaker || recognitionRef.current!==recognition) return;
       const transcript=Array.from(e.results).map(result=>result[0].transcript).join(' ');
@@ -578,6 +640,14 @@ function App() {
       if(activeUser.current!==speaker||recognitionRef.current!==recognition)return;
       recognitionRef.current=null;setRecording(false);
       if(recognitionFailed||!finalTranscript)return;
+      if(followUp?.ticket){
+        setVoiceDraft(false);
+        const score=KaalingaAssistant.scoreAnswer(finalTranscript),command=KaalingaWake.command(finalTranscript);
+        if(['skip','cancel','send'].includes(command)){skipPain(followUp.ticket);return;}
+        if(score!==null){updatePain({painScore:score},followUp.ticket);return;}
+        if(KaalingaRouting.classifyLocal(finalTranscript,{language}).priority===1){updatePain({context:finalTranscript},followUp.ticket);return;}
+        showAssistantPrompt('pain_followup_retry','',followUp.ticket);return;
+      }
       let draft=finalTranscript,prompt='confirm';
       if(followUp){
         const score=KaalingaAssistant.scoreAnswer(finalTranscript),command=KaalingaWake.command(finalTranscript);
@@ -589,7 +659,7 @@ function App() {
         else if(command!=='skip'&&followUp.prompt==='pain_question')prompt='pain_retry';
       }else{
         const result=KaalingaRouting.classifyLocal(draft,{language});
-        if(KaalingaAssistant.shouldAskPain(draft,result))prompt='pain_question';
+        if(KaalingaPain.reportedPain(draft)){send(draft,false,null,{});return;}
       }
       setText(draft);setPainScore(null);showAssistantPrompt(prompt,draft);
     };
@@ -726,14 +796,25 @@ function App() {
       ),
       assistantTurn && h('section',{className:'notice-box assistant-conversation','aria-label':'Kalinga voice assistant','aria-live':'polite'},
         h('strong',null,'Kalinga'),h('p',null,assistantTurn.text),
-        ['pain_question','pain_retry'].includes(assistantTurn.prompt)&&h('small',null,KaalingaAssistant.copy(language).replyHint),
+        ['pain_question','pain_retry','pain_notified','pain_followup_retry'].includes(assistantTurn.prompt)&&h('small',null,KaalingaAssistant.copy(language).replyHint),
         voicePlayback.ticket?.assistant_prompt&&['loading','playing'].includes(voicePlayback.status)&&h('button',{className:'btn btn-sm',onClick:()=>voicePlayer.current.stop()},voiceCopy.stop)),
+      painFollowUp&&h('fieldset',{id:'pain-follow-up',className:'pain-scale',disabled:processing||painUpdating||demoRunning},
+          h('legend',null,KaalingaAssistant.copy(language).notified),h('p',{id:'pain-question'},painCopy.score),
+          h('div',{className:'pain-options',role:'radiogroup','aria-labelledby':'pain-question'},Array.from({length:10},(_,i)=>i+1).map(score=>h('button',{key:score,type:'button',role:'radio','aria-checked':displayedPainScore===score,'aria-label':painCopy.option(score),className:'pain-option'+(displayedPainScore===score?' selected':''),onClick:()=>setPainScore(score)},score))),
+          h('div',{className:'pain-endpoints'},h('span',null,painCopy.low),h('span',null,painCopy.high)),
+          h('label',{htmlFor:'pain-location'},painCopy.location),h('input',{id:'pain-location',className:'fi',value:painLocation,maxLength:80,placeholder:painCopy.placeholder,onChange:e=>setPainLocation(e.target.value)}),
+          h('label',{className:'pain-change'},h('input',{type:'checkbox',checked:painWorsening,onChange:e=>setPainWorsening(e.target.checked)}),painCopy.worsening),
+          h('small',null,KaalingaAssistant.copy(language).pain_skipped),
+          painUpdateError&&h('p',{role:'alert'},painUpdateError),
+          h('div',{className:'update-controls'},h('button',{type:'button',className:'btn',disabled:painUpdating,onClick:toggleRecording},recording?'Stop recording':copy.voice),h('button',{type:'button',className:'btn btn-primary',disabled:painUpdating||(painScore===null&&!painLocation.trim()&&!painWorsening),onClick:()=>{stopWake();updatePain({...painScore!==null?{painScore}:{},painLocation,painWorsening});}},painUpdating?'Updating…':KaalingaAssistant.copy(language).save),h('button',{type:'button',className:'btn',disabled:painUpdating,onClick:()=>{stopWake();skipPain();}},KaalingaAssistant.copy(language).skip))
+        ),
       h('section',{className:'wake-panel','aria-label':wakeCopy.title},
         h('div',{className:'wake-heading'},h('strong',null,wakeCopy.title),h('button',{type:'button',className:'btn btn-sm'+(wakeState.enabled?' btn-warn':' btn-primary'),disabled:!wakeState.enabled&&(!wakeSupported||recording||processing||emergencyProcessing||demoRunning||videoOpen),onClick:toggleWake},wakeState.enabled?wakeCopy.disable:wakeCopy.enable)),
-        h('p',{className:'wake-status',role:'status'},wakeState.error?wakeCopy.error:wakeState.status==='listening'?(wakeState.phase==='pain'?KaalingaAssistant.copy(language).listenPain:wakeCopy[wakeState.phase]):wakeCopy[wakeState.status]||wakeCopy.off),
+        h('div',{className:'wake-status'+(patientTurn?' your-turn':''),role:'status'},patientTurn&&h('strong',null,turnCopy.ready),wakeState.error?wakeCopy.error:wakeState.status==='listening'?(['pain','pain_sent'].includes(wakeState.phase)?KaalingaAssistant.copy(language).listenPain:wakeCopy[wakeState.phase]):wakeCopy[wakeState.status]||wakeCopy.off),
         h('p',null,wakeCopy.hint),
         h('small',null,wakeSupported?(config.voiceInputProvider==='aws'?wakeCopy.awsPrivacy:wakeCopy.privacy):wakeCopy.unavailable),
         h('details',{className:'voice-options'},h('summary',null,language.startsWith('es')?'Opciones de voz':language.startsWith('hi')?'आवाज़ के विकल्प':language.startsWith('fr')?'Options vocales':'Voice options'),
+          h('label',{className:'voice-reply-option'},h('input',{type:'checkbox',checked:turnSound,onChange:e=>{setTurnSound(e.target.checked);turnSoundEnabled.current=e.target.checked;if(e.target.checked)turnCue.current.unlock();else turnCue.current.stop();}}),turnCopy.sound),
           config.voiceInputProvider==='browser'&&language.startsWith('en')&&h('div',{className:'speech-profile'},h('label',{htmlFor:'english-speech'},'English speech setting'),h('select',{id:'english-speech',className:'language-select',value:englishSpeech,disabled:recording||processing||emergencyProcessing||videoOpen,onChange:e=>{stopWake();voicePlayer.current.stop();setLastHeard(null);setEnglishSpeech(e.target.value);}},[['en-US','United States'],['en-IN','India'],['en-GB','United Kingdom'],['en-AU','Australia']].map(([code,label])=>h('option',{key:code,value:code},label))),h('small',null,'Choose the setting closest to your speech, then enable hands-free again.')),
           h('small',null,language.startsWith('es')?'Pruebe « Hola, Kalinga ». El micrófono también funciona sin la frase.':language.startsWith('hi')?'“हे कालिंगा” बोलकर देखें। माइक्रोफ़ोन बटन से भी बोल सकते हैं।':language.startsWith('fr')?'Essayez « Salut, Kalinga ». Le bouton micro fonctionne aussi sans cette phrase.':'Try “Hello, Kalinga”. You can also tap the microphone without a wake phrase.'),
           lastHeard&&h('p',{className:'voice-heard',dir:'auto'},h('strong',null,language.startsWith('es')?'He oído: ':language.startsWith('hi')?'सुना: ':language.startsWith('fr')?'J’ai entendu : ':'Microphone heard: '),lastHeard.transcript),
@@ -743,7 +824,7 @@ function App() {
       ),
       h('div',{className:'quick-row'},[copy.water,copy.blanket,copy.bathroom,copy.pain].map((label,index)=>{
         const Icon=[IconWater,IconBlanket,IconBathroom,IconPain][index];
-        return h('button',{key:index,className:'qb',disabled:processing||demoRunning,onClick:()=>{stopWake();setVoiceDraft(false);setText(copy.quick[index]);setPainScore(null);setPainLocation('');setPainWorsening(false);setPainOpen(index===3);if(index===3)showAssistantPrompt('pain_question',copy.quick[index]);else send(copy.quick[index],false,null,{});}},h('span',{className:'qb-ico'},h(Icon)),label);
+        return h('button',{key:index,className:'qb',disabled:processing||demoRunning,onClick:()=>{stopWake();setVoiceDraft(false);setText(copy.quick[index]);setPainScore(null);setPainLocation('');setPainWorsening(false);setPainOpen(index===3);send(copy.quick[index],false,null,{});}},h('span',{className:'qb-ico'},h(Icon)),label);
       })),
       h('form',{className:'input-area',onSubmit:e=>{e.preventDefault();stopWake();send(text);}},
         h('label',{className:'input-label',htmlFor:'request'},copy.request),
@@ -751,15 +832,7 @@ function App() {
           h('textarea',{id:'request',value:text,onChange:e=>{stopWake();setText(e.target.value);if(!e.target.value.trim())setVoiceDraft(false);},placeholder:copy.placeholder,maxLength:2000,dir:'auto',disabled:processing||demoRunning}),
           h('button',{type:'button',className:'mic-btn'+(recording?' recording':''),onClick:toggleRecording,'aria-label':recording?'Stop recording':copy.voice,disabled:processing||demoRunning},h('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,'aria-hidden':true},h('rect',{x:9,y:2,width:6,height:12,rx:3}),h('path',{d:'M5 10v2a7 7 0 0014 0v-2M12 19v3M8 22h8'})))
         ),
-        painVisible&&h('fieldset',{className:'pain-scale',disabled:processing||demoRunning},
-          h('legend',null,painCopy.title),h('p',{id:'pain-question'},painCopy.score),
-          h('div',{className:'pain-options',role:'radiogroup','aria-labelledby':'pain-question'},Array.from({length:10},(_,i)=>i+1).map(score=>h('button',{key:score,type:'button',role:'radio','aria-checked':displayedPainScore===score,'aria-label':painCopy.option(score),className:'pain-option'+(displayedPainScore===score?' selected':''),onClick:()=>setPainScore(score)},score))),
-          h('div',{className:'pain-endpoints'},h('span',null,painCopy.low),h('span',null,painCopy.high)),
-          h('label',{htmlFor:'pain-location'},painCopy.location),h('input',{id:'pain-location',className:'fi',value:painLocation,maxLength:80,placeholder:painCopy.placeholder,onChange:e=>setPainLocation(e.target.value)}),
-          h('label',{className:'pain-change'},h('input',{type:'checkbox',checked:painWorsening,onChange:e=>setPainWorsening(e.target.checked)}),painCopy.worsening),
-          h('small',null,painCopy.skip)
-        ),
-        recording && h('div',{className:'voice-status',role:'status'},h('span',{className:'voice-dot'}),copy.listening),
+        recording && h('div',{className:'voice-status',role:'status'},h('span',{className:'voice-dot'}),recordingReady?turnCopy.ready:wakeCopy.starting),
         config.voiceInputProvider==='aws'&&h('p',{className:'transcript-review'},wakeCopy.awsReview),
         voiceDraft && !recording && h('p',{className:'transcript-review'},voiceCopy.review),
         config?.voiceConfigured && h('label',{className:'voice-reply-option'},h('input',{type:'checkbox',checked:voiceReplies,disabled:processing,onChange:e=>{setVoiceReplies(e.target.checked);if(!e.target.checked){stopWake();deferredVoice.current=[];voicePlayer.current.stop();}}}),voiceCopy.replies),
@@ -772,7 +845,7 @@ function App() {
       ),
       h('section',{className:'patient-status','aria-label':copy.history},
         h('h2',null,copy.history),
-        tickets.length ? tickets.filter(ticket=>!ticket.parent_id||!tickets.some(parent=>parent.id===ticket.parent_id)).slice(0,12).map(ticket=>h(PatientTicket,{key:ticket.id,ticket,linkedTickets:tickets.filter(task=>task.parent_id===ticket.id),copy,voiceConfigured:config?.voiceConfigured,onReadback:readback})) : h('p',{style:{color:'var(--fg2)'}},'Your requests will appear here after they are delivered.')
+        tickets.length ? tickets.filter(ticket=>!ticket.parent_id||!tickets.some(parent=>parent.id===ticket.parent_id)).slice(0,12).map(ticket=>h(PatientTicket,{key:ticket.id,ticket,linkedTickets:tickets.filter(task=>task.parent_id===ticket.id),copy,voiceConfigured:config?.voiceConfigured,onReadback:readback,onPainUpdate:ticket=>{stopWake();setPainFollowUp(ticket);setPainScore(ticket.pain.score);setPainLocation(ticket.pain.location);setPainWorsening(ticket.pain.worsening);setPainUpdateError('');showAssistantPrompt('pain_notified','',ticket);}})) : h('p',{style:{color:'var(--fg2)'}},'Your requests will appear here after they are delivered.')
       ),
       h('div',{className:'notice-box'},'For immediate help, use the bedside call bell. This demo does not activate hospital paging equipment.'),
       h('button',{className:'btn btn-warn',style:{margin:'0 24px 20px',justifyContent:'center'},onClick:()=>{stopWake();runDemo();},disabled:demoRunning||processing},demoRunning?'Demo · '+demoStep:'Run the 8-request routing demo'),

@@ -15,6 +15,10 @@ Invitation and control text supports English, Spanish, Hindi, and French. Other 
 
 ## Hosted relay configuration
 
+For the current hackathon demo, Vercel has an explicit `WEBRTC_DEMO_MODE=true` option. This enables direct WebRTC with public Google STUN discovery and reports `videoNetwork: demo-direct`. Start with the iPad and phone on the same Wi-Fi. Both must keep the app open; sign into a patient room on one device and RN on the other. Send a Nursing request, acknowledge it, offer the call, and let both participants choose to join. On Safari, allow the requested camera/microphone access and tap **Enable call audio** if playback is blocked.
+
+Direct demo mode has no media relay and cannot guarantee connectivity across cellular, guest, isolated, or restrictive networks. Failed connections leave the care request open. Its server flag is off by default; a configured TURN relay takes precedence and retains relay-only transport. Participant authentication, nurse eligibility, acknowledgement, explicit patient acceptance, expiration, signaling privacy, and WebRTC encryption remain in place.
+
 Use HTTPS for device capture outside local development, a durable managed Postgres database for signaling, and a reachable TURN relay. WebRTC signaling uses normal authenticated HTTP polling, so the Vercel API does not need persistent WebSockets. Media travels through WebRTC, not through the API function.
 
 Configure coturn with REST authentication (`use-auth-secret` and the matching `static-auth-secret`), TLS certificates for TURNS, the appropriate realm, and its required listening/relay ports. Supply these app variables through server hosting settings:
@@ -24,7 +28,7 @@ WEBRTC_TURN_URLS=turns:relay.example.org:443?transport=tcp,turn:relay.example.or
 WEBRTC_TURN_SHARED_SECRET=your-server-only-relay-secret
 ```
 
-These example URLs are placeholders. The app issues HMAC credentials with a 30-minute lifetime to authenticated participants and uses relay-only transport when configured. Never put the shared secret in browser environment variables or committed files. Hosted video is disabled without relay configuration; requests and voice readback continue to work. A relay is not yet provisioned or live-tested here.
+These example URLs are placeholders. The app issues HMAC credentials with a 30-minute lifetime to authenticated participants and uses relay-only transport when configured. Never put the shared secret in browser environment variables or committed files. Hosted video is disabled without relay configuration unless the explicit direct demo flag is enabled. A relay is not yet provisioned or live-tested here.
 
 References: [WebRTC peer connections and TURN](https://webrtc.org/getting-started/peer-connections), [coturn REST credentials](https://github.com/coturn/coturn/blob/master/README.turnserver), and [browser media capture requirements](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia).
 

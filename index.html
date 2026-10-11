@@ -306,7 +306,8 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .voice-confirmation { display:flex; align-items:center; justify-content:space-between; gap:14px; }
 .voice-confirmation.patient-update { display:block; background:var(--brand-ghost); color:var(--fg); }
 .patient-update strong { color:var(--brand); }
-.patient-update p { margin:6px 0; font-size:16px; }
+.patient-update p { margin:10px 0; font-size:20px; line-height:1.65; }
+.assistant-conversation p { font-size:22px; line-height:1.6; margin:12px 0; }
 .update-controls { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--fg2); }
 .video-call-panel { max-width:960px; margin:24px auto; padding:24px; border:1px solid var(--border-strong); border-radius:var(--r4); background:var(--surface); }
 .call-heading { display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
@@ -320,7 +321,9 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .wake-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .wake-panel p { margin:8px 0; font-size:14px; }
 .wake-panel small { display:block; color:var(--fg2); line-height:1.6; }
-.wake-status { color:var(--brand); font-weight:600; }
+.wake-panel .wake-status { color:var(--fg); font-weight:650; font-size:20px; line-height:1.5; min-height:88px; padding:18px; margin:12px 0; border-radius:12px; background:var(--surface); border:1px solid var(--border-strong); overflow-wrap:anywhere; }
+.wake-panel .wake-status.your-turn { border:2px solid var(--brand); background:var(--brand-ghost); }
+.wake-status strong { display:block; font-size:22px; margin-bottom:6px; }
 .voice-options { margin-top:12px; border-top:1px solid var(--border); padding-top:10px; }
 .voice-options summary { cursor:pointer; color:var(--brand); font-weight:600; }
 .speech-profile { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:12px 0; }
@@ -347,7 +350,7 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .patient-language { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-top:18px; }
 .language-select { min-height:44px; border:1px solid var(--border); border-radius:8px; padding:8px 12px; background:var(--surface); color:var(--fg); max-width:180px; font-size:15px; }
 .qb { min-height:112px; font-size:16px; color:var(--fg2); gap:10px; }
-.ta-wrap textarea { min-height:140px; font-size:18px; padding:16px 58px 16px 16px; }
+.ta-wrap textarea { min-height:190px; font-size:22px; line-height:1.6; padding:20px 64px 20px 20px; }
 .mic-btn { width:44px; height:44px; }
 .go-btn { min-height:52px; font-size:17px; }
 .emergency-button { margin:0 24px 18px; min-height:56px; display:flex; justify-content:center; align-items:center; gap:10px; border:1px solid var(--red); border-radius:10px; background:var(--red-bg); color:var(--red); font-size:18px; font-weight:800; cursor:pointer; }
@@ -361,7 +364,7 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .linked-patient-task { padding:12px 0; border-bottom:1px solid var(--border); }
 .linked-patient-task > div { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .linked-patient-task p { color:var(--fg2); font-size:14px; }
-.pain-scale { border:1px solid var(--border); border-radius:14px; padding:18px; background:var(--surface); display:flex; flex-direction:column; gap:12px; }
+.pain-scale { scroll-margin-top:85px; margin:0 24px 20px; border:1px solid var(--border); border-radius:14px; padding:18px; background:var(--surface); display:flex; flex-direction:column; gap:12px; }
 .pain-scale legend { padding:0 6px; font-weight:700; }
 .pain-options { display:grid; grid-template-columns:repeat(10,minmax(0,1fr)); gap:6px; }
 .pain-option { min-width:0; min-height:44px; border:1px solid var(--border); border-radius:9px; background:var(--bg); color:var(--fg); font:inherit; font-weight:700; cursor:pointer; }

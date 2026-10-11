@@ -33,7 +33,7 @@
       if(ticket.assistant_prompt){
         const operation=new AbortController();pending=operation;onState({status:'loading',ticket});
         try{
-          const response=await fetchAudio('/api/assistant/voice',{method:'POST',headers:{'Content-Type':'application/json'},signal:operation.signal,body:JSON.stringify({prompt:ticket.assistant_prompt,language:ticket.language,text:ticket.draft})});
+          const response=await fetchAudio('/api/assistant/voice',{method:'POST',headers:{'Content-Type':'application/json'},signal:operation.signal,body:JSON.stringify({prompt:ticket.assistant_prompt,language:ticket.language,text:ticket.draft,ticketId:ticket.pain_ticket_id})});
           if(!response.ok)throw new Error('Voice unavailable');
           const blob=await response.blob();if(version!==generation)return false;
           const src=URLClass.createObjectURL(blob);audio=new AudioClass(src);blobs.set(audio,src);pending=null;
@@ -91,5 +91,40 @@
     }
     return {remember,observe,reset:()=>stages.clear()};
   }
-  return {createPlayer,createUpdateTracker};
+  // Unlock from a patient gesture; never request a microphone to play this cue.
+  function createTurnCue({AudioContextClass=globalThis.AudioContext||globalThis.webkitAudioContext}={}) {
+    let context=null,closed=false,generation=0;
+    const tones=new Set();
+    async function unlock() {
+      if(closed||!AudioContextClass)return false;
+      try {context ||= new AudioContextClass();await context.resume();return !closed&&context.state==='running';}
+      catch(_){return false;}
+    }
+    function stop() {
+      generation++;
+      for(const tone of tones){tone.oscillator.onended=null;try{tone.oscillator.stop();}catch(_){}tone.oscillator.disconnect();tone.gain.disconnect();}
+      tones.clear();
+    }
+    async function play() {
+      stop();const version=generation;
+      if(!context||!await unlock()||closed||version!==generation)return false;
+      try {
+        const start=context.currentTime;
+        for(const [offset,frequency] of [[0,660],[0.12,880]]) {
+          const oscillator=context.createOscillator(),gain=context.createGain(),tone={oscillator,gain};
+          oscillator.type='sine';oscillator.frequency.value=frequency;
+          gain.gain.setValueAtTime(0,start+offset);
+          gain.gain.linearRampToValueAtTime(0.045,start+offset+0.015);
+          gain.gain.linearRampToValueAtTime(0,start+offset+0.11);
+          oscillator.connect(gain);gain.connect(context.destination);tones.add(tone);
+          oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();tones.delete(tone);};
+          oscillator.start(start+offset);oscillator.stop(start+offset+0.12);
+        }
+        return true;
+      }catch(_){stop();return false;}
+    }
+    function dispose(){closed=true;stop();const previous=context;context=null;if(previous)previous.close().catch(()=>{});}
+    return {unlock,play,stop,dispose};
+  }
+  return {createPlayer,createUpdateTracker,createTurnCue};
 });
