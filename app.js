@@ -66,7 +66,7 @@ const TIERS = {
   specialized: { label:'Specialist coordination', color:'var(--sky)', bg:'var(--sky-bg)' }
 };
 const LANGUAGES = [
-  ['en-US','English'], ['es-ES','Español'], ['hi-IN','हिन्दी'], ['fr-FR','Français'],
+  ['en-US','English'], ['es-ES','Español'], ['es-MX','Español (México)'], ['hi-IN','हिन्दी'], ['fr-FR','Français'],
   ['pt-BR','Português'], ['zh-CN','中文'], ['ar-SA','العربية'], ['ko-KR','한국어'],
   ['tl-PH','Tagalog'], ['pl-PL','Polski'], ['de-DE','Deutsch'], ['ja-JP','日本語']
 ];
@@ -314,6 +314,12 @@ const TURN_COPY={
   hi:{ready:'अब आपकी बारी — बोलिए',sound:'मेरे बोलने की बारी पर ध्वनि'},
   fr:{ready:'À vous — parlez maintenant',sound:'Son quand c’est à moi de parler'}
 };
+const SPEECH_COPY={
+ en:{label:'Voice & reply language',speak:name=>'Speak in '+name,stop:'Stop voice input',hint:'Choose the language you speak. Tap Speak, then Stop when finished.',method:'Voice input method',record:'Multilingual recording',browser:'Browser live speech',privacy:'Records up to 30 seconds. Audio is sent to Groq Whisper for transcription and is not saved by Kalinga.',processing:'Transcribing your recording…',unsupported:'Voice input is unavailable in this browser. You can type or choose a quick request.',permission:'Microphone access was denied. Allow it in your browser, then try again.',language:'Your browser could not recognize this language. Choose Multilingual recording or type your request.',noSpeech:'I could not clearly hear a request. Please try again or type it.',failed:'Voice transcription stopped. Please retry or type your request.'},
+ es:{label:'Idioma de voz y respuesta',speak:name=>'Hablar en '+name,stop:'Detener entrada de voz',hint:'Elija el idioma que habla. Pulse Hablar y después Detener al terminar.',method:'Método de entrada de voz',record:'Grabación multilingüe',browser:'Voz en vivo del navegador',privacy:'Graba hasta 30 segundos. El audio se envía a Groq Whisper para transcribirlo; Kalinga no guarda el audio.',processing:'Transcribiendo su grabación…',unsupported:'La voz no está disponible en este navegador. Puede escribir o elegir una solicitud rápida.',permission:'No se permitió el micrófono. Permítalo en el navegador y vuelva a intentar.',language:'El navegador no pudo reconocer este idioma. Elija Grabación multilingüe o escriba.',noSpeech:'No pude escuchar claramente una solicitud. Intente otra vez o escriba.',failed:'La transcripción se detuvo. Intente otra vez o escriba.'},
+ hi:{label:'बोलने और जवाब की भाषा',speak:name=>name+' में बोलें',stop:'आवाज़ बंद करें',hint:'अपनी भाषा चुनें। बोलने का बटन दबाएँ और बात पूरी होने पर बंद करें।',method:'आवाज़ का तरीका',record:'बहुभाषी रिकॉर्डिंग',browser:'ब्राउज़र की लाइव आवाज़',privacy:'अधिकतम 30 सेकंड रिकॉर्ड करता है। लिखने के लिए आवाज़ Groq Whisper को भेजी जाती है। कालिंगा आवाज़ की रिकॉर्डिंग नहीं रखता।',processing:'आपकी आवाज़ लिख रहे हैं…',unsupported:'इस ब्राउज़र में आवाज़ उपलब्ध नहीं है। लिख सकते हैं या तैयार अनुरोध चुन सकते हैं।',permission:'माइक्रोफ़ोन की अनुमति नहीं मिली। ब्राउज़र में अनुमति देकर फिर कोशिश करें।',language:'ब्राउज़र यह भाषा नहीं पहचान पाया। बहुभाषी रिकॉर्डिंग चुनें या लिखें।',noSpeech:'अनुरोध साफ़ नहीं सुन पाई। फिर कोशिश करें या लिखें।',failed:'आवाज़ लिखना रुक गया। फिर कोशिश करें या अपना अनुरोध लिखें।'},
+ fr:{label:'Langue de la voix et des réponses',speak:name=>'Parler en '+name,stop:'Arrêter la saisie vocale',hint:'Choisissez votre langue. Appuyez sur Parler, puis Arrêter quand vous avez terminé.',method:'Méthode de saisie vocale',record:'Enregistrement multilingue',browser:'Reconnaissance vocale du navigateur',privacy:'Enregistre jusqu’à 30 secondes. L’audio est envoyé à Groq Whisper pour transcription; Kalinga ne conserve pas l’audio.',processing:'Transcription de votre enregistrement…',unsupported:'La voix est indisponible dans ce navigateur. Vous pouvez écrire ou choisir une demande rapide.',permission:'Le microphone a été refusé. Autorisez-le dans le navigateur et réessayez.',language:'Le navigateur n’a pas reconnu cette langue. Choisissez Enregistrement multilingue ou écrivez.',noSpeech:'Je n’ai pas clairement entendu une demande. Réessayez ou écrivez.',failed:'La transcription s’est arrêtée. Réessayez ou écrivez votre demande.'}
+};
 function App() {
   const [config,setConfig] = useState(null);
   const [user,setUser] = useState(null);
@@ -330,6 +336,7 @@ function App() {
   const [language,setLanguage] = useState('en-US');
   const [englishSpeech,setEnglishSpeech]=useState('en-US');
   const [lastHeard,setLastHeard]=useState(null);
+  const [voiceMethod,setVoiceMethod]=useState('recording'),[transcribing,setTranscribing]=useState(false),[voiceInputError,setVoiceInputError]=useState('');
   const [text,setText] = useState('');
   const [painOpen,setPainOpen]=useState(false),[painScore,setPainScore]=useState(null),[painLocation,setPainLocation]=useState(''),[painWorsening,setPainWorsening]=useState(false);
   const painSettings=useRef(null);painSettings.current={open:painOpen,score:painScore,location:painLocation,worsening:painWorsening,text};
@@ -385,8 +392,12 @@ function App() {
   const wakeCopy=WAKE_COPY[language.split('-')[0]]||WAKE_COPY.en;
   const turnCopy=TURN_COPY[language.split('-')[0]]||TURN_COPY.en;
   const patientTurn=wakeState.enabled&&wakeState.status==='listening'&&['capture','confirm','pain','pain_sent'].includes(wakeState.phase);
+  const speechCopy=SPEECH_COPY[language.split('-')[0]]||SPEECH_COPY.en;
+  const languageName=LANGUAGES.find(([code])=>code===language)?.[1]||language;
+  const useRecordedVoice=config?.voiceRecordingProvider==='groq'&&voiceMethod==='recording'&&KalingaUploadVoice.available();
+  const manualRecognition=useRecordedVoice?KalingaUploadVoice.createRecognitionClass():KaalingaTranscribe.getRecognition(config||{});
   const speechLanguage=config?.voiceInputProvider==='browser'&&language.startsWith('en')?englishSpeech:language;
-  const wakeSupported=Boolean(KaalingaTranscribe.getRecognition(config||{})&&WAKE_COPY[language.split('-')[0]]&&config?.voiceConfigured&&voiceReplies);
+  const wakeSupported=Boolean(KaalingaTranscribe.getRecognition(config||{})&&WAKE_COPY[language.split('-')[0]]&&(config?.voiceInputProvider!=='aws'||config.voiceInputLanguages?.includes(speechLanguage))&&config?.voiceConfigured&&voiceReplies);
 
   function announce(message) {
     setToast(message); clearTimeout(toastTimer.current);
@@ -405,7 +416,7 @@ function App() {
   useEffect(()=>{ boot(); return ()=>{ clearTimeout(toastTimer.current); wakeListener.current?.dispose(); recognitionRef.current?.abort(); voicePlayer.current.stop();turnCue.current.dispose(); }; },[]);
   useEffect(()=>{
     stopWake();
-    setLastHeard(null);setEnglishSpeech('en-US');
+    setLastHeard(null);setEnglishSpeech('en-US');setVoiceInputError('');setTranscribing(false);
     setVoiceDraft(false); setAssistantTurn(null); setPainFollowUp(null);setPainUpdateError(''); voicePlayer.current.stop(); voiceUpdates.current.reset(); deferredVoice.current=[]; setPatientUpdate(null);
     setActiveCall(null);setVideoOpen(false);seenCalls.current.clear();
     const previous=recognitionRef.current; recognitionRef.current=null; previous?.abort(); setRecording(false);setRecordingReady(false);
@@ -418,6 +429,7 @@ function App() {
     const waiting=deferredVoice.current; deferredVoice.current=[];
     for(const ticket of waiting) voicePlayer.current.enqueue(ticket);
   },[recording]);
+  function cancelManualVoice(){const previous=recognitionRef.current;recognitionRef.current=null;previous?.abort();setRecording(false);setRecordingReady(false);setTranscribing(false);}
   function stopWake(){
     turnCue.current.stop();
     setAssistantTurn(null);
@@ -448,16 +460,16 @@ function App() {
     controller.start();
   }
   useEffect(()=>{
-    const changed=()=>{if(document.hidden)turnCue.current.stop();wakeListener.current?.suspend('hidden',document.hidden);};
+    const changed=()=>{if(document.hidden){turnCue.current.stop();cancelManualVoice();}wakeListener.current?.suspend('hidden',document.hidden);};
     document.addEventListener('visibilitychange',changed);
     return()=>document.removeEventListener('visibilitychange',changed);
   },[]);
   useEffect(()=>{
     wakeListener.current?.suspend('busy',processing||emergencyProcessing||demoRunning);
     wakeListener.current?.suspend('video',videoOpen);
-    wakeListener.current?.suspend('manual',recording);
+    wakeListener.current?.suspend('manual',recording||transcribing);
     if(processing||emergencyProcessing||demoRunning||videoOpen)turnCue.current.stop();
-  },[processing,emergencyProcessing,demoRunning,videoOpen,recording]);
+  },[processing,emergencyProcessing,demoRunning,videoOpen,recording,transcribing]);
   function patientFeedback(ticket) {
     setPatientUpdate(ticket);
     if (!voiceSettings.current.enabled) return;
@@ -527,7 +539,7 @@ function App() {
   async function logout() {
     try { await api('/api/logout',post({})); }
     catch(err) { announce('Sign out failed. Please retry.'); return; }
-    stopWake();recognitionRef.current?.abort(); deferredVoice.current=[]; voicePlayer.current.stop();
+    stopWake();cancelManualVoice(); deferredVoice.current=[]; voicePlayer.current.stop();
     activeUser.current=null; setUser(null); setTickets([]); setNotifications([]); setRoster([]); setRosterOpen(false); setText(''); setNotificationOpen(false); setDemoResults([]); setConnected(false);
   }
   async function refresh() {
@@ -564,7 +576,7 @@ function App() {
     const painPayload=painOverride??(!urgent&&(KaalingaPain.hasPain(input)||(painContext.open&&input===painContext.text))?{painScore:painContext.score,painLocation:painContext.location,painWorsening:painContext.worsening}:{});
     const payload=retry ? {...retry} : {text:input.trim(),language,forceClinical:urgent,requestKey:crypto.randomUUID(),...painPayload};
     const sender=activeUser.current;
-    const recognition=recognitionRef.current; recognitionRef.current=null; recognition?.abort(); setRecording(false);
+    const recognition=recognitionRef.current; recognitionRef.current=null; recognition?.abort(); setRecording(false);setTranscribing(false);
     setRequestError(''); setRetryRequest(null);
     try {
       const ticket=await deliverRequest(payload);
@@ -591,6 +603,7 @@ function App() {
   }
   function skipPain(ticket=painTarget.current,quiet=false){
     if(!ticket)return;
+    cancelManualVoice();
     setPainFollowUp(current=>current?.id===ticket.id?null:current);setPainUpdateError('');setPainScore(null);setPainLocation('');setPainWorsening(false);
     if(voicePlayback.ticket?.assistant_prompt)voicePlayer.current.stop();
     if(!quiet)showAssistantPrompt('pain_skipped','',ticket);
@@ -619,15 +632,18 @@ function App() {
     const followUp=painTarget.current?{ticket:painTarget.current}:assistantTurn&&['pain_question','pain_retry'].includes(assistantTurn.prompt)?assistantTurn:null;
     stopWake();
     setRecordingReady(false);
+    if(transcribing)return;
     if(recording) { recognitionRef.current?.stop(); setRecording(false); return; }
-    const Recognition=KaalingaTranscribe.getRecognition(config);
-    if(!Recognition) { announce('Voice input is unavailable in this browser. You can type or use a quick request.'); return; }
+    setVoiceInputError('');
+    const Recognition=manualRecognition;
+    if(!Recognition) { setVoiceInputError(speechCopy.unsupported);announce(speechCopy.unsupported); return; }
     const recognition=new Recognition();
     const speaker=activeUser.current;
     voicePlayer.current.stop(); setVoiceDraft(false);
     if(turnSoundEnabled.current)turnCue.current.unlock();
-    recognition.lang=speechLanguage; recognition.continuous=false; recognition.interimResults=true;
+    recognition.lang=useRecordedVoice?language:speechLanguage; recognition.continuous=false; recognition.interimResults=true;
     let finalTranscript='',recognitionFailed=false;
+    recognition.onprocessing=()=>{if(activeUser.current===speaker&&recognitionRef.current===recognition){setTranscribing(true);setRecording(false);setRecordingReady(false);}};
     recognition.onstart=()=>{if(activeUser.current===speaker&&recognitionRef.current===recognition){setRecordingReady(true);if(!document.hidden&&turnSoundEnabled.current)turnCue.current.play();}};
     recognition.onresult=e=>{
       if(activeUser.current!==speaker || recognitionRef.current!==recognition) return;
@@ -638,7 +654,7 @@ function App() {
     };
     recognition.onend=()=>{
       if(activeUser.current!==speaker||recognitionRef.current!==recognition)return;
-      recognitionRef.current=null;setRecording(false);
+      recognitionRef.current=null;setRecording(false);setRecordingReady(false);setTranscribing(false);
       if(recognitionFailed||!finalTranscript)return;
       if(followUp?.ticket){
         setVoiceDraft(false);
@@ -663,12 +679,12 @@ function App() {
       }
       setText(draft);setPainScore(null);showAssistantPrompt(prompt,draft);
     };
-    recognition.onerror=()=>{recognitionFailed=true; if(activeUser.current===speaker && recognitionRef.current===recognition){setRecording(false);announce('Voice input stopped. You can still type your request.');} };
+    recognition.onerror=event=>{recognitionFailed=true;if(activeUser.current===speaker&&recognitionRef.current===recognition){setRecording(false);setRecordingReady(false);setTranscribing(false);const message=['not-allowed','service-not-allowed'].includes(event.error)?speechCopy.permission:event.error==='language-not-supported'?speechCopy.language:event.error==='no-speech'?speechCopy.noSpeech:speechCopy.failed;setVoiceInputError(message);announce(message);} };
     recognitionRef.current=recognition;
-    try { recognition.start(); setRecording(true); } catch(_) { announce('Microphone could not start. Please type your request.'); }
+    try { recognition.start(); setRecording(true); } catch(_) { setVoiceInputError(speechCopy.failed);announce(speechCopy.failed); }
   }
   async function readback(ticket) {
-    const recognition=recognitionRef.current; recognitionRef.current=null; recognition?.abort(); setRecording(false);
+    const recognition=recognitionRef.current; recognitionRef.current=null; recognition?.abort(); setRecording(false);setTranscribing(false);
     return voicePlayer.current.play(ticket);
   }
   async function action(ticket,actionName) {
@@ -692,7 +708,7 @@ function App() {
   }
   function stopPatientAudio(){
     stopWake();
-    const recognition=recognitionRef.current;recognitionRef.current=null;recognition?.abort();setRecording(false);deferredVoice.current=[];voicePlayer.current.stop();
+    const recognition=recognitionRef.current;recognitionRef.current=null;recognition?.abort();setRecording(false);setRecordingReady(false);setTranscribing(false);deferredVoice.current=[];voicePlayer.current.stop();
   }
   async function offerVideo(ticket){
     if(videoBusy)return;setVideoBusy(true);const sender=activeUser.current;
@@ -783,9 +799,18 @@ function App() {
     isPatient ? h('main',{className:'p-panel',dir:language.startsWith('ar')?'rtl':'ltr'},
       h('div',{className:'p-header'},
         h('h1',null,copy.title),h('p',null,copy.intro),h('div',{className:'room-chip'},h('span',{className:'room-dot'}),h('strong',null,user.room)),
-        h('div',{className:'patient-language'},h('label',{htmlFor:'patient-language'},'Language / भाषा'),h('select',{id:'patient-language',className:'language-select',value:language,onChange:e=>{stopWake();setLastHeard(null);const recognition=recognitionRef.current;recognitionRef.current=null;recognition?.abort();setRecording(false);setVoiceDraft(false);deferredVoice.current=[];voicePlayer.current.stop();setLanguage(e.target.value);},'aria-label':'Patient language'},LANGUAGES.map(([code,label])=>h('option',{key:code,value:code},label))))
+        h('div',{className:'patient-language'},h('label',{htmlFor:'patient-language'},speechCopy.label),h('select',{id:'patient-language',className:'language-select',value:language,onChange:e=>{stopWake();setLastHeard(null);const recognition=recognitionRef.current;recognitionRef.current=null;recognition?.abort();setRecording(false);setRecordingReady(false);setTranscribing(false);setVoiceInputError('');setVoiceDraft(false);deferredVoice.current=[];voicePlayer.current.stop();setLanguage(e.target.value);},'aria-label':'Patient language'},LANGUAGES.map(([code,label])=>h('option',{key:code,value:code},label))))
       ),
       h('button',{className:'emergency-button',onClick:()=>{stopWake();send('Emergency help requested using the urgent call button.',true);},disabled:emergencyProcessing},h(IconPain),emergencyProcessing?'Sending urgent request…':copy.urgent),
+        h('div',{className:'patient-voice-control'},
+          config?.voiceRecordingProvider==='groq'&&KalingaUploadVoice.available()&&h('select',{className:'language-select voice-method','aria-label':speechCopy.method,value:voiceMethod,disabled:recording||transcribing,onChange:e=>{stopWake();setVoiceMethod(e.target.value);setVoiceInputError('');}},h('option',{value:'recording'},speechCopy.record),h('option',{value:'browser'},speechCopy.browser)),
+          h('button',{type:'button',className:'btn btn-primary',disabled:transcribing||processing||emergencyProcessing||demoRunning||videoOpen||!manualRecognition,onClick:toggleRecording},transcribing?speechCopy.processing:recording?speechCopy.stop:speechCopy.speak(languageName)),
+          h('p',null,speechCopy.hint),
+          useRecordedVoice&&h('small',null,speechCopy.privacy),
+          (recording||transcribing)&&h('p',{role:'status'},transcribing?speechCopy.processing:recordingReady?turnCopy.ready:wakeCopy.starting),
+          voiceInputError&&h('p',{role:'alert'},voiceInputError),
+          !manualRecognition&&h('p',{role:'status'},speechCopy.unsupported)
+        ),
       patientUpdate && h('section',{className:'notice-box voice-confirmation patient-update','aria-label':voiceCopy.latest,'aria-live':'polite'},
         h('strong',null,voiceCopy.latest),
         h('p',{dir:'auto'},patientUpdate.status_message || patientUpdate.patient_summary),
@@ -806,10 +831,10 @@ function App() {
           h('label',{className:'pain-change'},h('input',{type:'checkbox',checked:painWorsening,onChange:e=>setPainWorsening(e.target.checked)}),painCopy.worsening),
           h('small',null,KaalingaAssistant.copy(language).pain_skipped),
           painUpdateError&&h('p',{role:'alert'},painUpdateError),
-          h('div',{className:'update-controls'},h('button',{type:'button',className:'btn',disabled:painUpdating,onClick:toggleRecording},recording?'Stop recording':copy.voice),h('button',{type:'button',className:'btn btn-primary',disabled:painUpdating||(painScore===null&&!painLocation.trim()&&!painWorsening),onClick:()=>{stopWake();updatePain({...painScore!==null?{painScore}:{},painLocation,painWorsening});}},painUpdating?'Updating…':KaalingaAssistant.copy(language).save),h('button',{type:'button',className:'btn',disabled:painUpdating,onClick:()=>{stopWake();skipPain();}},KaalingaAssistant.copy(language).skip))
+          h('div',{className:'update-controls'},h('button',{type:'button',className:'btn',disabled:painUpdating||transcribing,onClick:toggleRecording},recording?'Stop recording':copy.voice),h('button',{type:'button',className:'btn btn-primary',disabled:painUpdating||transcribing||recording||(painScore===null&&!painLocation.trim()&&!painWorsening),onClick:()=>{stopWake();updatePain({...painScore!==null?{painScore}:{},painLocation,painWorsening});}},painUpdating?'Updating…':KaalingaAssistant.copy(language).save),h('button',{type:'button',className:'btn',disabled:painUpdating,onClick:()=>{stopWake();skipPain();}},KaalingaAssistant.copy(language).skip))
         ),
       h('section',{className:'wake-panel','aria-label':wakeCopy.title},
-        h('div',{className:'wake-heading'},h('strong',null,wakeCopy.title),h('button',{type:'button',className:'btn btn-sm'+(wakeState.enabled?' btn-warn':' btn-primary'),disabled:!wakeState.enabled&&(!wakeSupported||recording||processing||emergencyProcessing||demoRunning||videoOpen),onClick:toggleWake},wakeState.enabled?wakeCopy.disable:wakeCopy.enable)),
+        h('div',{className:'wake-heading'},h('strong',null,wakeCopy.title),h('button',{type:'button',className:'btn btn-sm'+(wakeState.enabled?' btn-warn':' btn-primary'),disabled:!wakeState.enabled&&(!wakeSupported||recording||transcribing||processing||emergencyProcessing||demoRunning||videoOpen),onClick:toggleWake},wakeState.enabled?wakeCopy.disable:wakeCopy.enable)),
         h('div',{className:'wake-status'+(patientTurn?' your-turn':''),role:'status'},patientTurn&&h('strong',null,turnCopy.ready),wakeState.error?wakeCopy.error:wakeState.status==='listening'?(['pain','pain_sent'].includes(wakeState.phase)?KaalingaAssistant.copy(language).listenPain:wakeCopy[wakeState.phase]):wakeCopy[wakeState.status]||wakeCopy.off),
         h('p',null,wakeCopy.hint),
         h('small',null,wakeSupported?(config.voiceInputProvider==='aws'?wakeCopy.awsPrivacy:wakeCopy.privacy):wakeCopy.unavailable),
@@ -830,13 +855,13 @@ function App() {
         h('label',{className:'input-label',htmlFor:'request'},copy.request),
         h('div',{className:'ta-wrap'},
           h('textarea',{id:'request',value:text,onChange:e=>{stopWake();setText(e.target.value);if(!e.target.value.trim())setVoiceDraft(false);},placeholder:copy.placeholder,maxLength:2000,dir:'auto',disabled:processing||demoRunning}),
-          h('button',{type:'button',className:'mic-btn'+(recording?' recording':''),onClick:toggleRecording,'aria-label':recording?'Stop recording':copy.voice,disabled:processing||demoRunning},h('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,'aria-hidden':true},h('rect',{x:9,y:2,width:6,height:12,rx:3}),h('path',{d:'M5 10v2a7 7 0 0014 0v-2M12 19v3M8 22h8'})))
+          h('button',{type:'button',className:'mic-btn'+(recording?' recording':''),onClick:toggleRecording,'aria-label':recording?'Stop recording':copy.voice,disabled:processing||transcribing||demoRunning},h('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,'aria-hidden':true},h('rect',{x:9,y:2,width:6,height:12,rx:3}),h('path',{d:'M5 10v2a7 7 0 0014 0v-2M12 19v3M8 22h8'})))
         ),
         recording && h('div',{className:'voice-status',role:'status'},h('span',{className:'voice-dot'}),recordingReady?turnCopy.ready:wakeCopy.starting),
         config.voiceInputProvider==='aws'&&h('p',{className:'transcript-review'},wakeCopy.awsReview),
         voiceDraft && !recording && h('p',{className:'transcript-review'},voiceCopy.review),
         config?.voiceConfigured && h('label',{className:'voice-reply-option'},h('input',{type:'checkbox',checked:voiceReplies,disabled:processing,onChange:e=>{setVoiceReplies(e.target.checked);if(!e.target.checked){stopWake();deferredVoice.current=[];voicePlayer.current.stop();}}}),voiceCopy.replies),
-        h('button',{type:'submit',className:'go-btn',disabled:processing||demoRunning||recording||!text.trim()},processing?'Sending…':copy.send)
+        h('button',{type:'submit',className:'go-btn',disabled:processing||demoRunning||recording||transcribing||!text.trim()},processing?'Sending…':copy.send)
       ),
       requestError && h('div',{className:'error-box',role:'alert'},requestError,retryRequest&&h('button',{className:'btn',style:{marginTop:10},disabled:processing||emergencyProcessing,onClick:()=>{stopWake();send(retryRequest.text,retryRequest.forceClinical,retryRequest);}},'Retry the same request')),
       !patientUpdate && voicePlayback.status!=='idle' && !voicePlayback.ticket?.assistant_prompt && h('div',{className:'notice-box voice-confirmation',role:'status'},
@@ -845,7 +870,7 @@ function App() {
       ),
       h('section',{className:'patient-status','aria-label':copy.history},
         h('h2',null,copy.history),
-        tickets.length ? tickets.filter(ticket=>!ticket.parent_id||!tickets.some(parent=>parent.id===ticket.parent_id)).slice(0,12).map(ticket=>h(PatientTicket,{key:ticket.id,ticket,linkedTickets:tickets.filter(task=>task.parent_id===ticket.id),copy,voiceConfigured:config?.voiceConfigured,onReadback:readback,onPainUpdate:ticket=>{stopWake();setPainFollowUp(ticket);setPainScore(ticket.pain.score);setPainLocation(ticket.pain.location);setPainWorsening(ticket.pain.worsening);setPainUpdateError('');showAssistantPrompt('pain_notified','',ticket);}})) : h('p',{style:{color:'var(--fg2)'}},'Your requests will appear here after they are delivered.')
+        tickets.length ? tickets.filter(ticket=>!ticket.parent_id||!tickets.some(parent=>parent.id===ticket.parent_id)).slice(0,12).map(ticket=>h(PatientTicket,{key:ticket.id,ticket,linkedTickets:tickets.filter(task=>task.parent_id===ticket.id),copy,voiceConfigured:config?.voiceConfigured,onReadback:readback,onPainUpdate:ticket=>{stopWake();cancelManualVoice();setPainFollowUp(ticket);setPainScore(ticket.pain.score);setPainLocation(ticket.pain.location);setPainWorsening(ticket.pain.worsening);setPainUpdateError('');showAssistantPrompt('pain_notified','',ticket);}})) : h('p',{style:{color:'var(--fg2)'}},'Your requests will appear here after they are delivered.')
       ),
       h('div',{className:'notice-box'},'For immediate help, use the bedside call bell. This demo does not activate hospital paging equipment.'),
       h('button',{className:'btn btn-warn',style:{margin:'0 24px 20px',justifyContent:'center'},onClick:()=>{stopWake();runDemo();},disabled:demoRunning||processing},demoRunning?'Demo · '+demoStep:'Run the 8-request routing demo'),

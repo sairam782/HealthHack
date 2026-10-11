@@ -1,10 +1,10 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.KaalingaPain=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
   'use strict';
-  const cue=/(?:^|[^\p{L}])(?:pain(?:ful)?|hurts?|aching|ache|dolor|duele|douleur|schmerz)(?=$|[^\p{L}])|दर्द|ألم|痛み|통증/u;
+  const cue=/(?:^|[^\p{L}])(?:pain(?:ful)?|hurts?|aching|ache|dolor|duele|douleur|schmerz)(?=$|[^\p{L}])|दर्द|दर्ध|ألم|痛み|통증/u;
   const words={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,uno:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,siete:7,ocho:8,nueve:9,diez:10,un:1,deux:2,trois:3,quatre:4,cinq:5,sept:7,huit:8,neuf:9,dix:10,'एक':1,'दो':2,'तीन':3,'चार':4,'पाँच':5,'पांच':5,'छह':6,'सात':7,'आठ':8,'नौ':9,'दस':10};
   const normalize=text=>String(text).normalize('NFKC').toLowerCase().replace(/[०-९]/g,c=>String(c.charCodeAt(0)-0x0966)).replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-0x0660));
   function hasPain(text){return cue.test(normalize(text));}
-  function reportedPain(text){return hasPain(text)&&!/(?:\b(?:no pain|not in pain|(?:don't|do not) have (?:any )?pain|sin dolor|pas de douleur)\b|दर्द नहीं)/iu.test(normalize(text));}
+  function reportedPain(text){return hasPain(text)&&!/(?:\b(?:no pain|not in pain|(?:don't|do not) have (?:any )?pain|sin dolor|pas de douleur)\b|(?:दर्द|दर्ध) नहीं)/iu.test(normalize(text));}
   function extractScore(text){
     const t=normalize(text);if(!hasPain(t))return null;
     const number='(?:\\d{1,2}|'+Object.keys(words).join('|')+')';
@@ -12,7 +12,7 @@
     // Require a scale expression or a score directly attached to a pain label;
     // room numbers and medication doses never count as pain scores.
     for(const match of t.matchAll(new RegExp('(?:^|[^\\p{L}\\p{N}.])('+number+')\\s*(?:/\\s*10\\b|out of (?:10|ten)\\b|sobre (?:10|diez)\\b|sur (?:10|dix)\\b|में से (?:10|दस))','gu')))candidates.push(match[1]);
-    for(const match of t.matchAll(new RegExp('(?:pain|dolor|douleur|दर्द)\\s*(?:(?:score|level|is|at|es|de|है|का स्तर)\\s*){0,2}[:=]?\\s*('+number+')(?!\\s*(?:mg|milligrams?|tablets?|pills?|hours?|days?|out of|/))(?=$|[^\\p{L}\\p{N}.])','gu')))candidates.push(match[1]);
+    for(const match of t.matchAll(new RegExp('(?:pain|dolor|douleur|दर्द|दर्ध)\\s*(?:(?:score|level|is|at|es|de|है|का स्तर)\\s*){0,2}[:=]?\\s*('+number+')(?!\\s*(?:mg|milligrams?|tablets?|pills?|hours?|days?|out of|/))(?=$|[^\\p{L}\\p{N}.])','gu')))candidates.push(match[1]);
     const scores=[...new Set(candidates.map(v=>words[v]??Number(v)))];
     return scores.length===1&&Number.isInteger(scores[0])&&scores[0]>=1&&scores[0]<=10?scores[0]:null;
   }
@@ -20,7 +20,7 @@
     const selected=Number.isInteger(options.painScore)&&options.painScore>=1&&options.painScore<=10?options.painScore:null;
     const transcript=extractScore(text),score=selected??transcript;
     if(!hasPain(text)&&score===null&&!options.painWorsening)return null;
-    const worsening=options.painWorsening===true||/pain.*(?:worse|worsening|suddenly|increas)|(?:worse|worsening|sudden).*pain|dolor.*(?:peor|aument)|douleur.*(?:augmente|aggrave)|दर्द.*(?:बढ़|अचानक)/iu.test(text);
+    const worsening=options.painWorsening===true||/pain.*(?:worse|worsening|suddenly|increas)|(?:worse|worsening|sudden).*pain|dolor.*(?:peor|aument)|douleur.*(?:augmente|aggrave)|(?:दर्द|दर्ध).*(?:बढ़|अचानक)/iu.test(text);
     return {score,location:typeof options.painLocation==='string'?options.painLocation.trim():'',worsening,score_source:selected!==null?'selected':score!==null?'transcript':null,transcript_score:transcript,conflicting_score:selected!==null&&transcript!==null&&selected!==transcript,band:score===null?null:score<=3?'mild':score<=6?'moderate':'severe'};
   }
   const COPY={

@@ -18,6 +18,12 @@ The patient-only pain endpoint verifies ticket ownership and uses a revision che
 
 ## Language and speech
 
+Manual voice now defaults to **Multilingual recording** when Groq is configured and the browser supports MediaRecorder. Select **Voice & reply language**, tap **Speak in [language]**, speak, and tap **Stop voice input**. The recording also stops after 30 seconds. Hindi, Spanish, **Español (México)** and French have localized recording controls. Mexican Spanish retains the `es-MX` locale throughout the app; Whisper receives the ISO language `es`.
+
+The patient-only `/api/transcribe/recording` endpoint sends the clip to Groq `whisper-large-v3` using transcription, preserving the original language. It accepts at most 1 MB of audio in bounded JSON, validates format, limits attempts, and rejects empty or low-quality segment results. These checks cannot guarantee recognition accuracy. Kalinga does not persist audio; the provider processes it. Changing language, signing out, hiding the page or joining a call cancels capture/pending transcription. Pain transcripts use the existing immediate Nursing flow; routine transcripts remain drafts until confirmed.
+
+**Browser live speech** is available as an alternative. Hands-free wake detection still uses the browser or separately configured AWS streaming; the recorded path does not add hands-free Whisper. Existing ElevenLabs spoken replies are retained. Physical phone/iPad microphones, accents and short score answers still need device/native-speaker testing.
+
 Hands-free wake detection now handles split greeting/name results, punctuation, and recognition alternatives. Patients using English browser recognition can choose a regional speech setting and inspect the latest microphone transcript under **Voice options**. See [real-speaker wake acceptance checks](wake-acceptance.md) for the limits, test protocol, and next provider comparison. This does not establish accent accuracy or enable AWS Transcribe.
 
 The new conversational prompts are localized in English, Spanish, Hindi and French. Other languages retain their existing request/status readback; the app does not insert an English conversational question for those selections. Native-speaker and physical-device testing are still required.

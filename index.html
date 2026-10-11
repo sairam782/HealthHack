@@ -347,6 +347,10 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .p-header h1 { font-size:32px; }
 .p-header p { font-size:16px; line-height:1.6; }
 .room-chip { font-size:14px; }
+.patient-voice-control { display:flex; flex-direction:column; gap:10px; margin:14px 24px 18px; text-align:left; }
+.patient-voice-control .btn { min-height:52px; font-size:18px; white-space:normal; }
+.patient-voice-control p { margin:0; font-size:14px; }
+.patient-voice-control .voice-method { width:100%; max-width:none; }
 .patient-language { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-top:18px; }
 .language-select { min-height:44px; border:1px solid var(--border); border-radius:8px; padding:8px 12px; background:var(--surface); color:var(--fg); max-width:180px; font-size:15px; }
 .qb { min-height:112px; font-size:16px; color:var(--fg2); gap:10px; }
@@ -469,6 +473,7 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 <script src="/voice-reply.js"></script>
 <script src="/video-call.js"></script>
 <script src="/transcribe-input.js"></script>
+<script src="/upload-voice.js"></script>
 <script src="/wake-voice.js"></script>
 <script src="/app.js"></script>
 </body>
