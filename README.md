@@ -1,5 +1,5 @@
 # Kalinga
-
+## Live Demo [**Kalinga – Try the App**](https://kalinga-three.vercel.app)
 Route a patient's hospital request to the right team, track the handoff, and notify the patient when staff acknowledge or complete it. Built for [Rutgers Health Hack 2026](https://ruhealthhack.com/), Ops Unleashed, Challenge 2: Inpatient Services.
 
 ## Run locally
@@ -54,6 +54,8 @@ AWS Bedrock classification and multilingual Transcribe input are available throu
 | clerk@kaalinga.demo | Unit Clerk |
 | specialist@kaalinga.demo | Specialized Services |
 | coordinator@kaalinga.demo | All departments, operational metrics, and staffing roster |
+
+password: uepoZ5C90yOd2fNiXJT1v7Uk
 
 The app also includes charge nurse, nurse manager, nursing assistant, hospitalist, resident, fellow, NP/PA, RT, observer, transport, rehabilitation, pharmacy, nutrition, social work, case management, wound care, advocacy, interpreter/ASL, chaplain, and infection-prevention accounts. [Full role review and account directory](docs/staff-roles.md).
 
